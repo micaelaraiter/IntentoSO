@@ -1,0 +1,5 @@
+[INFO] 22:17:17:729 tp0.h/(6303:6303): soy un log
+[INFO] 22:18:01:887 tp0.h/(6345:6345): soy un log
+[INFO] 22:21:14:506 tp0.h/(6397:6397): soy un log
+[INFO] 22:21:59:128 tp0.h/(6431:6431): soy un log
+[INFO] 22:26:02:586 tp0.h/(6524:6524): soy un log
