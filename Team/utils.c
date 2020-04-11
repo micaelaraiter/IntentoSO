@@ -1,6 +1,8 @@
 /*
  * conexiones.c
  *
+ *  Created on: 2 mar. 2019
+ *      Author: utnso
  */
 
 #include "utils.h"
@@ -25,7 +27,7 @@ int crear_conexion(char *ip, char* puerto)
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
-
+	log_info(logger,"estoy intentando crear la conexion");
 	getaddrinfo(ip, puerto, &hints, &server_info);
 
 	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
@@ -41,6 +43,7 @@ int crear_conexion(char *ip, char* puerto)
 //TODO
 void enviar_mensaje(char* mensaje, int socket_cliente)
 {
+
 
 }
 

@@ -1,10 +1,12 @@
 /*
  * Cliente.h
  *
+ *  Created on: 28 feb. 2019
+ *      Author: utnso
  */
 
-#ifndef TEAM_H_
-#define TEAM_H_
+#ifndef GAMECARD_H_
+#define GAMECARD_H_
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -20,4 +22,4 @@ t_log* iniciar_logger(void);
 t_config* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
 
-#endif /* TEAM_H_ */
+#endif /* GAMECARD_H_ */

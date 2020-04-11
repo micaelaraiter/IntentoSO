@@ -1,6 +1,8 @@
 /*
  * conexiones.h
  *
+ *  Created on: 2 mar. 2019
+ *      Author: utnso
  */
 
 #ifndef UTILS_H_
