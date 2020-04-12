@@ -1,69 +1,52 @@
 #include "broker.h"
 
 int main(void) {
-	    int socket_de_conexion;
-	   /* int sizeMemoria;
-	    int sizeMinMemoria;
 
-	    t_log* logger;
-		t_config* config;
-
-	    char* algoritmoMemoria = string_new();
-	    char* algoritmoReemplazo= string_new();
-	    char* algoritmoParticionLibre= string_new();
-		char* ip = string_new();
-		char* puerto= string_new();
-
-	 	 cambio la forma de asignarle el valor a nuestras variables, los que obtiene del config
-
-		string_append(&algoritmoMemoria,config_get_string_value(config, "ALGORITMO_MEMORIA"));
-		string_append(&algoritmoReemplazo,config_get_string_value(config, "ALGORITMO_REEMPLAZO"));
-		string_append(&algoritmoParticionLibre, config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE"));
-		string_append(&ip,config_get_string_value(config, "IP_BROKER"));
-		string_append(&puerto, config_get_string_value(config, "PUERTO_BROKER")); */
+	    int socket_team;
+	    int socket_gamecard;
 
 		t_log* logger;
-		t_config* config;
 		t_config_broker* datos_de_config = leer_config();
 
 		logger = iniciar_logger();
 
-	    //socket_de_conexion = crear_conexion(ip, puerto);
+	    socket_team = crear_conexion(datos_de_config -> ip_team, datos_de_config -> puerto_team);
+	    socket_gamecard = crear_conexion(datos_de_config -> ip_gamecard, datos_de_config -> puerto_gamecard);
 
-		terminar_programa(socket_de_conexion, logger, config);
+		terminar_programa(socket_team, socket_gamecard, logger, datos_de_config);
 }
 
 
-
-//TODO
 t_log* iniciar_logger(void) {
-	return log_create("broker.log","broker",1,LOG_LEVEL_INFO);
+	return log_create("broker.log", "broker", 1, LOG_LEVEL_INFO);
 }
 
-//TODO
-
-t_config_broker* leer_config(void)
-{
+t_config_broker* leer_config(void) {
 	t_config* config;
-    t_config_broker* configBroker= malloc(sizeof(t_config_broker));
+    t_config_broker* config_broker = malloc(sizeof(t_config_broker));
 
 	 config = config_create("Debug/broker.config");
 
-	 configBroker->sizeMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 configBroker->sizeMinMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 configBroker->algoritmoMemoria =config_get_string_value(config, "ALGORITMO_MEMORIA");
-	 configBroker->algoritmoReemplazo=config_get_string_value(config, "ALGORITMO_REEMPLAZO");
-	 configBroker->algoritmoParticionLibre= config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE");
-	 configBroker->ip=config_get_string_value(config, "IP_BROKER");
-	 configBroker->puerto=config_get_string_value(config, "PUERTO_BROKER");
-	 configBroker->frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+	 config_broker -> sizeMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 config_broker -> sizeMinMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 config_broker -> algoritmoMemoria = config_get_string_value(config, "ALGORITMO_MEMORIA");
+	 config_broker -> algoritmoReemplazo = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
+	 config_broker -> algoritmoParticionLibre = config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE");
+	 config_broker -> ip_team = config_get_string_value(config, "IP_BROKER_TEAM");
+	 config_broker -> puerto_team = config_get_string_value(config, "PUERTO_BROKER_TEAM");
+	 config_broker -> ip_gamecard = config_get_string_value(config, "IP_BROKER_GAMECARD");
+	 config_broker -> puerto_gamecard = config_get_string_value(config, "PUERTO_BROKER_GAMECARD");
+	 config_broker -> frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 
-	 return configBroker;
+	 config_destroy(config);
+
+	 return config_broker;
 }
 
-//TODO
-void terminar_programa(int conexion, t_log* logger, t_config* config) {
-	close(conexion);
+void terminar_programa(int socket_team, int socket_gamecard, t_log* logger, t_config_broker* datos_de_config) {
+
+	free(datos_de_config);
+	close(socket_gamecard);
+	close(socket_team);
 	log_destroy(logger);
-	config_destroy(config);
 }

@@ -1,10 +1,3 @@
-/*
- * Cliente.h
- *
- *  Created on: 28 feb. 2019
- *      Author: utnso
- */
-
 #ifndef GAMECARD_H_
 #define GAMECARD_H_
 
@@ -16,6 +9,7 @@
 #include<readline/readline.h>
 
 #include "utils.h"
+
 typedef struct {
 	int conexion;
     int sizeMemoria;
@@ -23,15 +17,15 @@ typedef struct {
 	char* algoritmoMemoria;
 	char* algoritmoReemplazo;
 	char* algoritmoParticionLibre;
-	char* ip;
-	char* puerto;
+	char* ip_team;
+	char* puerto_team;
+	char* ip_gamecard;
+	char* puerto_gamecard;
 	int frecuenciaCompactacion;
 } t_config_broker;
 
 t_log* iniciar_logger(void);
 t_config_broker* leer_config(void);
-void terminar_programa(int, t_log*, t_config*);
-
-
+void terminar_programa(int, int, t_log*, t_config_broker*);
 
 #endif /* GAMECARD_H_ */
