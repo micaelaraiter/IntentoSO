@@ -14,7 +14,7 @@
 #include<commons/string.h>
 #include<commons/config.h>
 #include<readline/readline.h>
-
+//Por qué GAMECARD_H_? Está en todos los .h
 #include "utils.h"
 
 
