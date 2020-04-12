@@ -35,7 +35,7 @@ t_log* iniciar_logger(void)
 //TODO
 t_config* leer_config(void)
 {
-	return config_create("team.config");
+	return config_create("Debug/team.config");
 }
 
 //TODO

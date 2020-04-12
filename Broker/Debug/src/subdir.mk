@@ -4,15 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../src/team.c \
+../src/broker.c \
 ../src/utils.c 
 
 OBJS += \
-./src/team.o \
+./src/broker.o \
 ./src/utils.o 
 
 C_DEPS += \
-./src/team.d \
+./src/broker.d \
 ./src/utils.d 
 
 
