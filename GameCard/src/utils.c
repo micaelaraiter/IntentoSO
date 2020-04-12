@@ -90,7 +90,6 @@ void liberar_conexion(int socket_cliente)
 {
 	close(socket_cliente);
 }
-
 void iniciar_servidor(char *IP, char *PUERTO)
 {
 	int socket_servidor;
@@ -180,3 +179,4 @@ void devolver_mensaje(void* payload, int size, int socket_cliente)
 	free(paquete);
 	log_info(logger,"Mensaje devuelto");
 }
+

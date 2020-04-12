@@ -7,7 +7,7 @@
 
 #ifndef GAMECARD_H_
 #define GAMECARD_H_
-
+//Por qué GAMECARD_H_? Está en todos los .h
 #include<stdio.h>
 #include<stdlib.h>
 #include<commons/log.h>

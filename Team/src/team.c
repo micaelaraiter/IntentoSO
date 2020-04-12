@@ -26,19 +26,19 @@ int main(void)
 		terminar_programa(conexion, logger, config);
 }
 
-//TODO
+
 t_log* iniciar_logger(void)
 {
-	return log_create("log.txt","tp0.h",1,LOG_LEVEL_INFO);
+	return log_create("team.log","team",1,LOG_LEVEL_INFO);
 }
 
-//TODO
+
 t_config* leer_config(void)
 {
 	return config_create("Debug/team.config");
 }
 
-//TODO
+
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	log_destroy(logger);
