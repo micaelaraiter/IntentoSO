@@ -5,15 +5,22 @@ int main(void) {
 	    int socket_team;
 	    int socket_gamecard;
 
-		t_log* logger;
-		t_config_broker* datos_de_config = leer_config();
+		t_log* logger = iniciar_logger();
 
-		logger = iniciar_logger();
+		log_info(logger, "leer la config");
+		t_config_broker* datos_de_config = leer_config(logger);
+		log_info(logger, "leer la config");
 
+		log_info(logger, "socket team");
 	    socket_team = crear_conexion(datos_de_config -> ip_team, datos_de_config -> puerto_team);
+
+	    log_info(logger, "socket gamecard");
 	    socket_gamecard = crear_conexion(datos_de_config -> ip_gamecard, datos_de_config -> puerto_gamecard);
 
+	    log_info(logger, "terminar programa");
 		terminar_programa(socket_team, socket_gamecard, logger, datos_de_config);
+		log_info(logger, "programa terminado");
+
 }
 
 
@@ -21,9 +28,12 @@ t_log* iniciar_logger(void) {
 	return log_create("broker.log", "broker", 1, LOG_LEVEL_INFO);
 }
 
-t_config_broker* leer_config(void) {
+t_config_broker* leer_config(t_log* logger) {
 	t_config* config;
-    t_config_broker* config_broker = malloc(sizeof(t_config_broker));
+
+	log_info(logger, "peso malloc config %d", sizeof(t_config_broker));
+
+	t_config_broker* config_broker = malloc(sizeof(t_config_broker)+13);
 
 	 config = config_create("Debug/broker.config");
 
