@@ -7,6 +7,12 @@
 
 #include "utils.h"
 
+extern int pthread_create (pthread_t *__restrict __newthread,
+			   const pthread_attr_t *__restrict __attr,
+			   void *(*__start_routine) (void *),
+			   void *__restrict __arg) __THROWNL __nonnull ((1, 3));
+extern int pthread_detach (pthread_t __th) __THROW;
+
 //TODO
 /*
  * Recibe un paquete a serializar, y un puntero a un int en el que dejar
@@ -78,6 +84,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 //TODO
 void* recibir_mensaje(int socket_cliente, int* size)
 {
+	t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
