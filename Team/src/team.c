@@ -29,7 +29,7 @@ int main(void)
 
 t_log* iniciar_logger(void)
 {
-	return log_create("team.log","team",1,LOG_LEVEL_INFO);
+	return log_create("team.log", "team", 1, LOG_LEVEL_INFO);
 }
 
 
