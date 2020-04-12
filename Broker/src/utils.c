@@ -8,9 +8,9 @@
 #include "utils.h"
 
 extern int pthread_create (pthread_t *__restrict __newthread,
-			   const pthread_attr_t *__restrict __attr,
-			   void *(*__start_routine) (void *),
-			   void *__restrict __arg) __THROWNL __nonnull ((1, 3));
+			   	   	   	   const pthread_attr_t *__restrict __attr,
+						   void *(*__start_routine) (void *),
+						   void *__restrict __arg) __THROWNL __nonnull ((1, 3));
 extern int pthread_detach (pthread_t __th) __THROW;
 
 //TODO
@@ -22,7 +22,7 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
  {
 // cod_op|stream_size|stream
 	int malloc_size = bytes + sizeof(op_code) + sizeof(int);
-	void* _stream = malloc(malloc_size+1);
+	void* _stream = malloc(malloc_size);
 	int offset = 0;
 
 	memcpy(_stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
@@ -87,7 +87,7 @@ void* recibir_mensaje(int socket_cliente, int* size)
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
+	recv(socket_cliente, buffer, sizeof(buffer -> size), MSG_WAITALL);
 	log_info(logger,"Tamaño de paquete recibido: %d",*size);
 	buffer = malloc(*size);
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
@@ -152,6 +152,7 @@ void serve_client(int* socket)
 		cod_op = -1;
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
+	printf("el valor de socket es : %d", (int)* ())
 }
 
 void process_request(int cod_op, int cliente_fd) {

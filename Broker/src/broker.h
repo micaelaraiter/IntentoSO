@@ -19,7 +19,19 @@
 
 
 t_log* iniciar_logger(void);
-config_broker leer_config(void);
+t_config_broker leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
+
+typedef struct {
+	int conexion;
+    int sizeMemoria;
+	int sizeMinMemoria;
+	char* algoritmoMemoria;
+	char* algoritmoReemplazo;
+	char* algoritmoParticionLibre;
+	char* ip;
+	char* puerto;
+	int frecuenciaCompactacion;
+} t_config_broker;
 
 #endif /* GAMECARD_H_ */
