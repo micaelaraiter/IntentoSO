@@ -16,12 +16,6 @@
 #include<readline/readline.h>
 
 #include "utils.h"
-
-
-t_log* iniciar_logger(void);
-t_config_broker leer_config(void);
-void terminar_programa(int, t_log*, t_config*);
-
 typedef struct {
 	int conexion;
     int sizeMemoria;
@@ -33,5 +27,11 @@ typedef struct {
 	char* puerto;
 	int frecuenciaCompactacion;
 } t_config_broker;
+
+t_log* iniciar_logger(void);
+t_config_broker* leer_config(void);
+void terminar_programa(int, t_log*, t_config*);
+
+
 
 #endif /* GAMECARD_H_ */

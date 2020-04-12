@@ -87,7 +87,7 @@ void* recibir_mensaje(int socket_cliente, int* size)
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, buffer, sizeof(buffer -> size), MSG_WAITALL);
+	recv(socket_cliente, buffer, *size, MSG_WAITALL);
 	log_info(logger,"Tamaño de paquete recibido: %d",*size);
 	buffer = malloc(*size);
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
@@ -152,7 +152,7 @@ void serve_client(int* socket)
 		cod_op = -1;
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
-	printf("el valor de socket es : %d", (int)* ())
+	printf("el valor de socket es : %d", (int)* (socket));
 }
 
 void process_request(int cod_op, int cliente_fd) {

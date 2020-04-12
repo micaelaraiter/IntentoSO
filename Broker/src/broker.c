@@ -1,8 +1,8 @@
 #include "broker.h"
 
 int main(void) {
-	    /* int socket_de_conexion;
-	    int sizeMemoria;
+	    int socket_de_conexion;
+	   /* int sizeMemoria;
 	    int sizeMinMemoria;
 
 	    t_log* logger;
@@ -24,11 +24,11 @@ int main(void) {
 
 		t_log* logger;
 		t_config* config;
-		t_config_broker datos_de_config = leer_config();
+		t_config_broker* datos_de_config = leer_config();
 
 		logger = iniciar_logger();
 
-	    socket_de_conexion = crear_conexion(ip, puerto);
+	    //socket_de_conexion = crear_conexion(ip, puerto);
 
 		terminar_programa(socket_de_conexion, logger, config);
 }
@@ -42,21 +42,21 @@ t_log* iniciar_logger(void) {
 
 //TODO
 
-t_config_broker leer_config(void)
+t_config_broker* leer_config(void)
 {
 	t_config* config;
-    t_config_broker configBroker;
+    t_config_broker* configBroker= malloc(sizeof(t_config_broker));
 
 	 config = config_create("Debug/broker.config");
 
-	 configBroker.sizeMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 configBroker.sizeMinMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 string_append(&configBroker.algoritmoMemoria ,config_get_string_value(config, "ALGORITMO_MEMORIA"));
-	 string_append(&configBroker.algoritmoReemplazo,config_get_string_value(config, "ALGORITMO_REEMPLAZO"));
-	 string_append(&configBroker.algoritmoParticionLibre, config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE"));
-	 string_append(&configBroker.ip,config_get_string_value(config, "IP_BROKER"));
-	 string_append(&configBroker.puerto, config_get_string_value(config, "PUERTO_BROKER"));
-	 configBroker.frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+	 configBroker->sizeMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 configBroker->sizeMinMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 configBroker->algoritmoMemoria =config_get_string_value(config, "ALGORITMO_MEMORIA");
+	 configBroker->algoritmoReemplazo=config_get_string_value(config, "ALGORITMO_REEMPLAZO");
+	 configBroker->algoritmoParticionLibre= config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE");
+	 configBroker->ip=config_get_string_value(config, "IP_BROKER");
+	 configBroker->puerto=config_get_string_value(config, "PUERTO_BROKER");
+	 configBroker->frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 
 	 return configBroker;
 }
