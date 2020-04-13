@@ -10,31 +10,44 @@
 int main(void)
 {
 	    int conexion;
-		char* ip = string_new();
-		char* puerto= string_new();
+		char* ip;
+		char* puerto;
 
 		t_log* logger;
 		t_config* config;
 
 		logger = iniciar_logger();
 		config = leer_config();
-		string_append(&ip,config_get_string_value(config, "IP_BROKER"));
-		string_append(&puerto, config_get_string_value(config, "PUERTO_BROKER"));
+		ip = config_get_string_value(config, "IP");
+		puerto = config_get_string_value(config, "PUERTO");
 
-	    //conexion = crear_conexion(ip, puerto);
-
-		terminar_programa(conexion, logger, config);
+	    conexion = crear_conexion("127.0.0.1","4444");
+		enviar_mensaje("PUTO",conexion);
+		liberar_conexion(conexion);
+//		int* size = strlen("PUTO") + 1;
+//		recibir_mensaje(conexion,&size);
+//		terminar_programa(conexion, logger, config);
 }
 
 
 t_log* iniciar_logger(void)
 {
+	if (log_create("team.log", "team", 1, LOG_LEVEL_INFO) == NULL){
+		printf("ERROR EN LA CREACION DEL LOGGER/n");
+		exit(1);
+				}
+
 	return log_create("team.log", "team", 1, LOG_LEVEL_INFO);
+
 }
 
 
 t_config* leer_config(void)
 {
+	if (config_create("Debug/team.config") == NULL){
+		printf("ERROR EN LA CONFIG/n");
+		exit(2);
+	}
 	return config_create("Debug/team.config");
 }
 
