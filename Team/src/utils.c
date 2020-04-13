@@ -15,7 +15,7 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
  {
 // cod_op|stream_size|stream
 	int malloc_size = bytes + sizeof(op_code) + sizeof(int);
-	void* _stream = malloc(malloc_size+1);
+	void* _stream = malloc(malloc_size);
 	int offset = 0;
 
 	memcpy(_stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
@@ -86,6 +86,27 @@ void* recibir_mensaje(int socket_cliente, int* size)
 	return buffer;
 }
 
+
+char* recibir_mensaje_cliente(int socket){
+	op_code operacion;
+	recv(socket,&operacion,sizeof(operacion),0);
+
+	int buffer_size;
+	recv(socket,&buffer_size,buffer_size,0);
+
+	char* buffer = malloc(buffer_size);
+	recv(socket,buffer,buffer_size,0);
+
+	printf("Buffer size: %d",buffer_size);
+	printf("Op code: %d",operacion);
+
+
+	if(buffer[buffer_size-1] != '/0'){
+		printf("El buffer no es un string");
+	}
+
+	return buffer;
+}
 
 void liberar_conexion(int socket_cliente)
 {

@@ -39,21 +39,21 @@ typedef struct
 pthread_t thread;
 t_log* logger;
 
+
+//client
 void* serializar_paquete(t_paquete* paquete, int bytes);
 int crear_conexion(char* ip, char* puerto);
 void enviar_mensaje(char* mensaje, int socket_cliente);
-
+char* resibir_mensaje(int socket);
+//server
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 void* recibir_mensaje(int socket_cliente, int* size);
 void* recibir_buffer(int*, int); /// este no esta definido en utils.c
-
 void iniciar_servidor(char *IP, char *PUERTO);
 void esperar_cliente(int);
 void serve_client(int *socket);
-int recibir_operacion(int);
 void process_request(int cod_op, int cliente_fd);
-
 void devolver_mensaje(void* payload, int size, int socket_cliente);
-
+int recibir_operacion(int);
 #endif /* UTILS_H_ */

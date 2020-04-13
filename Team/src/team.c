@@ -18,15 +18,17 @@ int main(void)
 
 		logger = iniciar_logger();
 		config = leer_config();
-		ip = config_get_string_value(config, "IP");
-		puerto = config_get_string_value(config, "PUERTO");
+		ip = config_get_string_value(config,"IP");
+		puerto = config_get_string_value(config,"PUERTO");
 
-	    conexion = crear_conexion("127.0.0.1","4444");
-		enviar_mensaje("PUTO",conexion);
+	    conexion = crear_conexion(ip,puerto);
+		enviar_mensaje("hola",conexion);
 		liberar_conexion(conexion);
-//		int* size = strlen("PUTO") + 1;
-//		recibir_mensaje(conexion,&size);
-//		terminar_programa(conexion, logger, config);
+//
+//		printf("El ip es : %s",ip);
+//		printf("El port es : %s ",puerto);
+		recibir_mensaje_cliente(conexion);
+		terminar_programa(conexion, logger, config);
 }
 
 
