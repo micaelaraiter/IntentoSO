@@ -98,7 +98,7 @@ void iniciar_servidor(char *IP, char *PUERTO) {
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
-
+    log_info(logger,"intento traer la info");
     getaddrinfo(IP, PUERTO, &hints, &servinfo);
 
     for (p=servinfo; p != NULL; p = p -> ai_next) {
