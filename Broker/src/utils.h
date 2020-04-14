@@ -37,7 +37,6 @@ int crear_conexion(char* ip, char* puerto);
 void enviar_mensaje(char* mensaje, int socket_cliente);
 
 void eliminar_paquete(t_paquete* paquete);
-void liberar_conexion(int socket_cliente);
 void* recibir_mensaje(int socket_cliente, int* size);
 void* recibir_buffer(int*, int); /// este no esta definido en utils.c
 
@@ -48,5 +47,7 @@ int recibir_operacion(int);
 void process_request(int cod_op, int cliente_fd);
 
 void devolver_mensaje(void* payload, int size, int socket_cliente);
+void liberar_conexion(int socket_cliente);
+void liberar_logger(t_log* logger);
 
 #endif /* UTILS_H_ */

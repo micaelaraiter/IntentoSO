@@ -10,9 +10,8 @@ extern int pthread_detach (pthread_t __th) __THROW;
  * Recibe un paquete a serializar, y un puntero a un int en el que dejar
  * el tamaño del stream de bytes serializados que devuelve
  */
-void* serializar_paquete(t_paquete* paquete, int bytes) {
-    // cod_op|stream_size|stream
-	int malloc_size = bytes + sizeof(op_code) + sizeof(int);
+void* serializar_paquete(t_paquete* paquete, int* bytes) {
+	int malloc_size = paquete -> buffer -> size + sizeof(op_code) + sizeof(int);
 	void* _stream = malloc(malloc_size);
 	int offset = 0;
 
@@ -22,6 +21,9 @@ void* serializar_paquete(t_paquete* paquete, int bytes) {
 	offset += sizeof(paquete -> buffer -> size);
 	memcpy(_stream + offset, paquete -> buffer -> stream, paquete -> buffer -> size);
 	offset += paquete -> buffer -> size;
+
+	(*bytes) = malloc_size;
+
 	return _stream;
 }
 
@@ -58,11 +60,11 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	paquete -> codigo_operacion = MENSAJE;
 	paquete -> buffer = buffer;
 
-	void* stream = serializar_paquete(paquete, paquete -> buffer -> size);
+	int size_serializado;
+	void* stream = serializar_paquete(paquete, &size_serializado);
 
-	int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
-
-	send(socket_cliente, stream, header, 0);
+	// int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
+	send(socket_cliente, stream, size_serializado, 0);
 
 	free(buffer -> stream);
 	free(buffer);
@@ -83,10 +85,6 @@ void* recibir_mensaje(int socket_cliente, int* size) {
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
 	log_info(logger,"Mensaje recibido.");
 	return buffer;
-}
-
-void liberar_conexion(int socket_cliente) {
-	close(socket_cliente);
 }
 
 void iniciar_servidor(char *IP, char *PUERTO) {
@@ -178,4 +176,15 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	free(paquete -> buffer);
 	free(paquete);
 	log_info(logger,"Mensaje devuelto");
+}
+
+
+void liberar_conexion(int socket_cliente) {
+	close(socket_cliente);
+}
+
+void liberar_logger(t_log* logger){
+	if(logger != NULL){
+		log_destroy(logger);
+	}
 }
