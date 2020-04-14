@@ -24,9 +24,9 @@ int main(void)
 	    conexion = crear_conexion(ip,puerto);
 		enviar_mensaje("hola",conexion);
 		liberar_conexion(conexion);
-//
-//		printf("El ip es : %s",ip);
-//		printf("El port es : %s ",puerto);
+
+		printf("El ip es : %s",ip);
+		printf("El port es : %s ",puerto);
 		recibir_mensaje_cliente(conexion);
 		terminar_programa(conexion, logger, config);
 }
