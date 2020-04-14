@@ -1,9 +1,3 @@
-/*
- * conexiones.c
- *
- *  Created on: 2 mar. 2019
- *      Author: utnso
- */
 
 #include "utils.h"
 
@@ -11,20 +5,21 @@
  * Recibe un paquete a serializar, y un puntero a un int en el que dejar
  * el tamaño del stream de bytes serializados que devuelve
  */
-void* serializar_paquete(t_paquete* paquete, int bytes)
- {
-// cod_op|stream_size|stream
-	int malloc_size = bytes + sizeof(op_code) + sizeof(int);
-	void* _stream = malloc(malloc_size);
+void* serializar_paquete(t_paquete* paquete, int* bytes) {
+	int malloc_size = paquete -> buffer -> size + sizeof(op_code) + sizeof(int);
+	void* stream = malloc(malloc_size);
 	int offset = 0;
 
-	memcpy(_stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
+	memcpy(stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
 	offset += sizeof(paquete -> codigo_operacion);
-	memcpy(_stream + offset, &(paquete -> buffer -> size), sizeof(paquete -> buffer -> size));
+	memcpy(stream + offset, &(paquete -> buffer -> size), sizeof(paquete -> buffer -> size));
 	offset += sizeof(paquete -> buffer -> size);
-	memcpy(_stream + offset, paquete -> buffer -> stream, paquete -> buffer -> size);
+	memcpy(stream + offset, paquete -> buffer -> stream, paquete -> buffer -> size);
 	offset += paquete -> buffer -> size;
-	return _stream;
+
+	(*bytes) = malloc_size;
+	log_info(logger, "%d", bytes);
+	return stream;
 }
 
 int crear_conexion(char *ip, char* puerto)
@@ -54,20 +49,20 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	t_buffer* buffer = malloc(sizeof(t_buffer));
 
 	buffer -> size = strlen(mensaje) + 1;
-	buffer -> stream = malloc(buffer -> size); //inicializo el stream puesto que es un puntero
-	memcpy(buffer->stream,mensaje,buffer->size);
+	buffer -> stream = malloc(buffer -> size);
+	memcpy(buffer -> stream,mensaje,buffer -> size);
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete -> codigo_operacion = MENSAJE;
 	paquete -> buffer = buffer;
 
-	void* stream = serializar_paquete(paquete, paquete -> buffer -> size);
+	int size_serializado;
+	void* stream = serializar_paquete(paquete, &size_serializado);
 
-	int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
+	// int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
+	send(socket_cliente, stream, size_serializado, 0);
 
-	send(socket_cliente, stream, header, 0);
-
-	free(buffer->stream);
+	free(buffer -> stream);
 	free(buffer);
 	free(paquete);
 	free(stream);
@@ -84,13 +79,6 @@ void* recibir_mensaje(int socket_cliente, int* size)
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
 	log_info(logger,"Mensaje recibido.");
 	return buffer;
-}
-
-
-
-void liberar_conexion(int socket_cliente)
-{
-	close(socket_cliente);
 }
 
 void iniciar_servidor(char *IP, char *PUERTO)
@@ -168,17 +156,32 @@ void devolver_mensaje(void* payload, int size, int socket_cliente)
 {
 	log_info(logger,"Devolviendo mensaje");
 	t_paquete* paquete = malloc(sizeof(t_paquete));
+
 	paquete->codigo_operacion = MENSAJE;
 	paquete->buffer = malloc(sizeof(t_buffer));
 	paquete->buffer->size = size;
 	paquete->buffer->stream = malloc(paquete->buffer->size);
 	memcpy(paquete->buffer->stream, payload, paquete->buffer->size);
+
 	int bytes = paquete->buffer->size + 2*sizeof(int);
 	void* a_enviar = serializar_paquete(paquete, bytes);
+
 	send(socket_cliente, a_enviar, bytes, 0);
+
 	free(a_enviar);
 	free(paquete->buffer->stream);
 	free(paquete->buffer);
 	free(paquete);
+
 	log_info(logger,"Mensaje devuelto");
+}
+
+void liberar_conexion(int socket_cliente) {
+	close(socket_cliente);
+}
+
+void liberar_logger(t_log* logger){
+	if(logger != NULL){
+		log_destroy(logger);
+	}
 }

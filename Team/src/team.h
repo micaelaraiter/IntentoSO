@@ -1,9 +1,3 @@
-/*
- * Cliente.h
- *
- *  Created on: 28 feb. 2019
- *      Author: utnso
- */
 
 #ifndef GAMECARD_H_
 #define GAMECARD_H_
@@ -17,9 +11,17 @@
 
 #include "utils.h"
 
+typedef struct {
+    int tiempoReintentoConexion;
+	int tiempoReintentoOperacion;
+	char* puntoMontajeTallgras;
+	char* ipBroker;
+	char* puertoBroker;
+} t_config_team;
+
 
 t_log* iniciar_logger(void);
-t_config* leer_config(void);
+t_config_team* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
 
 #endif /* GAMECARD_H_ */
