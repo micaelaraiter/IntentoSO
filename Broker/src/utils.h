@@ -32,7 +32,7 @@ typedef struct
 pthread_t thread;
 t_log* logger;
 
-void* serializar_paquete(t_paquete* paquete, int bytes);
+void* serializar_paquete(t_paquete* paquete, int* bytes);
 int crear_conexion(char* ip, char* puerto);
 void enviar_mensaje(char* mensaje, int socket_cliente);
 
