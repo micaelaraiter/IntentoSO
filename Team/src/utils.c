@@ -63,7 +63,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 
 	void* stream = serializar_paquete(paquete, paquete -> buffer -> size);
 
-	int header = sizeof(paquete->codigo_operacion) + paquete->buffer->size + sizeof(paquete->buffer->size);
+	int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
 
 	send(socket_cliente, stream, header, 0);
 

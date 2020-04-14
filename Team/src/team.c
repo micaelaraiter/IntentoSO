@@ -10,13 +10,12 @@
 int main(void)
 {
 		t_config* config = leer_config();
-	    int conexion;
 		char* ip = config_get_string_value(config,"IP"); // ESTA DE PRUEBA PIBE POR ESO NO ES DEL BROKER
 		char* puerto =  config_get_string_value(config,"PUERTO");
 
 		t_log* logger = iniciar_logger();
 
-	    conexion = crear_conexion(ip,puerto);
+		int conexion = crear_conexion(ip,puerto);
 		enviar_mensaje("Hola",conexion);
 		liberar_conexion(conexion);
 
