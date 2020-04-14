@@ -1,5 +1,4 @@
 #include "broker.h"
-#include "utils.h"
 
 int main(void) {
 
@@ -8,17 +7,12 @@ int main(void) {
 		t_config_broker* config = leer_config();
 		// log_info(logger, "config leida");
 
-
-
 	    // log_info(logger, "terminar programa");
 		terminar_programa(logger, config);
 		// log_info(logger, "programa terminado");
-
 }
 
-
 t_log* iniciar_logger(void) {
-
 	t_log* logger;
 
 	if((logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO)) == NULL){
@@ -35,16 +29,16 @@ t_config_broker* leer_config() {
 
 	 config = config_create("Debug/broker.config");
 
-	 config_broker -> sizeMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 config_broker -> sizeMinMemoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 config_broker -> algoritmoMemoria = strdup(config_get_string_value(config, "ALGORITMO_MEMORIA"));
-	 config_broker -> algoritmoReemplazo = strdup(config_get_string_value(config, "ALGORITMO_REEMPLAZO"));
-	 config_broker -> algoritmoParticionLibre = strdup(config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE"));
+	 config_broker -> size_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 config_broker -> size_min_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
+	 config_broker -> algoritmo_memoria = strdup(config_get_string_value(config, "ALGORITMO_MEMORIA"));
+	 config_broker -> algoritmo_reemplazo = strdup(config_get_string_value(config, "ALGORITMO_REEMPLAZO"));
+	 config_broker -> algoritmo_particion_libre = strdup(config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE"));
 	 config_broker -> ip_team = strdup(config_get_string_value(config, "IP_BROKER_TEAM"));
 	 config_broker -> puerto_team = strdup(config_get_string_value(config, "PUERTO_BROKER_TEAM"));
 	 config_broker -> ip_gamecard = strdup(config_get_string_value(config, "IP_BROKER_GAMECARD"));
 	 config_broker -> puerto_gamecard = strdup(config_get_string_value(config, "PUERTO_BROKER_GAMECARD"));
-	 config_broker -> frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+	 config_broker -> frecuencia_compactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 
 	 config_destroy(config);
 

@@ -1,10 +1,9 @@
-
 #include "utils.h"
 
-/*
- * Recibe un paquete a serializar, y un puntero a un int en el que dejar
+/* Recibe un paquete a serializar, y un puntero a un int en el que dejar
  * el tamaño del stream de bytes serializados que devuelve
  */
+
 void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	int malloc_size = paquete -> buffer -> size + sizeof(op_code) + sizeof(int);
 	void* stream = malloc(malloc_size);
@@ -22,8 +21,7 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	return stream;
 }
 
-int crear_conexion(char *ip, char* puerto)
-{
+int crear_conexion(char *ip, char* puerto) {
 	struct addrinfo hints;
 	struct addrinfo *server_info;
 
@@ -34,9 +32,9 @@ int crear_conexion(char *ip, char* puerto)
 
 	getaddrinfo(ip, puerto, &hints, &server_info);
 
-	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
+	int socket_cliente = socket(server_info -> ai_family, server_info -> ai_socktype, server_info -> ai_protocol);
 
-	if(connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) == -1)
+	if(connect(socket_cliente, server_info -> ai_addr, server_info -> ai_addrlen) == -1)
 		printf("error");
 
 	freeaddrinfo(server_info);
@@ -44,8 +42,7 @@ int crear_conexion(char *ip, char* puerto)
 	return socket_cliente;
 }
 
-void enviar_mensaje(char* mensaje, int socket_cliente)
-{
+void enviar_mensaje(char* mensaje, int socket_cliente) {
 	t_buffer* buffer = malloc(sizeof(t_buffer));
 
 	buffer -> size = strlen(mensaje) + 1;
@@ -68,21 +65,23 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	free(stream);
 }
 
-void* recibir_mensaje(int socket_cliente, int* size)
-{
+void* recibir_mensaje(int socket_cliente, int* size) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
+
 	log_info(logger,"Recibiendo mensaje.");
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
 	log_info(logger,"Tamaño de paquete recibido: %d",*size);
+
 	buffer = malloc(*size);
+
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
 	log_info(logger,"Mensaje recibido.");
+
 	return buffer;
 }
 
-void iniciar_servidor(char *IP, char *PUERTO)
-{
+void iniciar_servidor(char *IP, char *PUERTO) {
 	int socket_servidor;
 
     struct addrinfo hints, *servinfo, *p;
@@ -94,12 +93,12 @@ void iniciar_servidor(char *IP, char *PUERTO)
 
     getaddrinfo(IP, PUERTO, &hints, &servinfo);
 
-    for (p=servinfo; p != NULL; p = p->ai_next)
+    for (p = servinfo; p != NULL; p = p -> ai_next)
     {
-        if ((socket_servidor = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
+        if ((socket_servidor = socket(p -> ai_family, p -> ai_socktype, p -> ai_protocol)) == -1)
             continue;
 
-        if (bind(socket_servidor, p->ai_addr, p->ai_addrlen) == -1) {
+        if (bind(socket_servidor, p -> ai_addr, p -> ai_addrlen) == -1) {
             close(socket_servidor);
             continue;
         }
@@ -114,23 +113,23 @@ void iniciar_servidor(char *IP, char *PUERTO)
     	esperar_cliente(socket_servidor);
 }
 
-void esperar_cliente(int socket_servidor)
-{
+void esperar_cliente(int socket_servidor) {
 	struct sockaddr_in dir_cliente;
 
 	int tam_direccion = sizeof(struct sockaddr_in);
-
 	int socket_cliente = accept(socket_servidor, (void*) &dir_cliente, &tam_direccion);
-	pthread_create(&thread,NULL,(void*)serve_client,&socket_cliente);
+
+	pthread_create(&thread, NULL, (void*)serve_client, &socket_cliente);
 	pthread_detach(thread);
 
 }
 
-void serve_client(int* socket)
-{
+void serve_client(int* socket) {
 	int cod_op;
+
 	if(recv(*socket, &cod_op, sizeof(int), MSG_WAITALL) == -1)
 		cod_op = -1;
+
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
 }
@@ -138,7 +137,9 @@ void serve_client(int* socket)
 void process_request(int cod_op, int cliente_fd) {
 	int size;
 	void* msg;
+
 	log_info(logger,"Codigo de operacion %d",cod_op);
+
 	switch (cod_op) {
 		case MENSAJE:
 			msg = recibir_mensaje(cliente_fd, &size);
@@ -152,36 +153,33 @@ void process_request(int cod_op, int cliente_fd) {
 	}
 }
 
-void devolver_mensaje(void* payload, int size, int socket_cliente)
-{
+void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	log_info(logger,"Devolviendo mensaje");
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	paquete->codigo_operacion = MENSAJE;
-	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->size = size;
-	paquete->buffer->stream = malloc(paquete->buffer->size);
-	memcpy(paquete->buffer->stream, payload, paquete->buffer->size);
+	paquete -> codigo_operacion = MENSAJE;
+	paquete -> buffer = malloc(sizeof(t_buffer));
+	paquete -> buffer -> size = size;
+	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
+	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
 
-	int bytes = paquete->buffer->size + 2*sizeof(int);
-	void* a_enviar = serializar_paquete(paquete, bytes);
+	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
+	void* a_enviar = serializar_paquete(paquete, &bytes);
 
 	send(socket_cliente, a_enviar, bytes, 0);
 
 	free(a_enviar);
-	free(paquete->buffer->stream);
-	free(paquete->buffer);
+	free(paquete -> buffer -> stream);
+	free(paquete -> buffer);
 	free(paquete);
 
 	log_info(logger,"Mensaje devuelto");
 }
 
 void liberar_config(t_config_team* config) {
-	free(config -> tiempoReintentoConexion);
-	free(config -> tiempoReintentoOperacion);
-	free(config -> puntoMontajeTallgras);
-	free(config -> ipBroker);
-	free(config -> puertoBroker);
+	free(config -> punto_montaje_tallgrass);
+	free(config -> ip_broker);
+	free(config -> puerto_broker);
 	free(config);
 }
 

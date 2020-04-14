@@ -13,31 +13,28 @@
 #include<pthread.h>
 
 typedef struct {
-    int sizeMemoria;
-	int sizeMinMemoria;
-	char* algoritmoMemoria;
-	char* algoritmoReemplazo;
-	char* algoritmoParticionLibre;
+    int size_memoria;
+	int size_min_memoria;
+	char* algoritmo_memoria;
+	char* algoritmo_reemplazo;
+	char* algoritmo_particion_libre;
 	char* ip_team;
 	char* puerto_team;
 	char* ip_gamecard;
 	char* puerto_gamecard;
-	int frecuenciaCompactacion;
+	int frecuencia_compactacion;
 } t_config_broker;
 
-typedef enum
-{
+typedef enum {
 	MENSAJE = 1,
 }op_code;
 
-typedef struct
-{
+typedef struct {
 	int size;
 	void* stream;
 } t_buffer;
 
-typedef struct
-{
+typedef struct {
 	op_code codigo_operacion;
 	t_buffer* buffer;
 } t_paquete;

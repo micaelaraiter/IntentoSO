@@ -6,8 +6,7 @@ extern int pthread_create (pthread_t *__restrict __newthread,
 						   void *__restrict __arg) __THROWNL __nonnull ((1, 3));
 extern int pthread_detach (pthread_t __th) __THROW;
 
-/*
- * Recibe un paquete a serializar, y un puntero a un int en el que dejar
+/* Recibe un paquete a serializar, y un puntero a un int en el que dejar
  * el tamaño del stream de bytes serializados que devuelve
  */
 void* serializar_paquete(t_paquete* paquete, int* bytes) {
@@ -24,6 +23,7 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 
 	(*bytes) = malloc_size;
 	log_info(logger, "%d", bytes);
+
 	return stream;
 }
 
@@ -78,7 +78,7 @@ void iniciar_servidor(char *IP, char *PUERTO) {
 
     getaddrinfo(IP, PUERTO, &hints, &servinfo);
 
-    for (p=servinfo; p != NULL; p = p -> ai_next) {
+    for (p = servinfo; p != NULL; p = p -> ai_next) {
         if ((socket_servidor = socket(p -> ai_family, p -> ai_socktype, p -> ai_protocol)) == -1)
             continue;
 
@@ -101,8 +101,8 @@ void esperar_cliente(int socket_servidor) {
 	struct sockaddr_in dir_cliente;
 
 	int tam_direccion = sizeof(struct sockaddr_in);
-
 	int socket_cliente = accept(socket_servidor, (void*) &dir_cliente, &tam_direccion);
+
 	pthread_create(&thread,NULL,(void*)serve_client,&socket_cliente);
 	pthread_detach(thread);
 
@@ -110,8 +110,10 @@ void esperar_cliente(int socket_servidor) {
 
 void serve_client(int* socket) {
 	int cod_op;
+
 	if(recv(*socket, &cod_op, sizeof(int), MSG_WAITALL) == -1)
 		cod_op = -1;
+
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
 	printf("el valor de socket es : %d", (int)* (socket));
@@ -120,7 +122,9 @@ void serve_client(int* socket) {
 void process_request(int cod_op, int cliente_fd) {
 	int size;
 	void* msg;
+
 	log_info(logger,"Codigo de operacion %d",cod_op);
+
 	switch (cod_op) {
 		case MENSAJE:
 			msg = recibir_mensaje(cliente_fd, &size);
@@ -143,10 +147,10 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	paquete->codigo_operacion = MENSAJE;
-	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->size = size;
-	paquete->buffer->stream = malloc(paquete -> buffer -> size);
+	paquete -> codigo_operacion = MENSAJE;
+	paquete -> buffer = malloc(sizeof(t_buffer));
+	paquete -> buffer -> size = size;
+	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
 	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
 
 	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
@@ -162,9 +166,9 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 }
 
 void liberar_config(t_config_broker* config) {
-	free(config -> algoritmoMemoria);
-	free(config -> algoritmoReemplazo);
-	free(config -> algoritmoParticionLibre);
+	free(config -> algoritmo_memoria);
+	free(config -> algoritmo_reemplazo);
+	free(config -> algoritmo_particion_libre);
 	free(config -> ip_team);
 	free(config -> puerto_team);
 	free(config -> ip_gamecard);

@@ -1,4 +1,3 @@
-
 #ifndef UTILS_H_
 #define UTILS_H_
 
@@ -15,26 +14,23 @@
 
 
 typedef struct {
-    int tiempoReintentoConexion;
-	int tiempoReintentoOperacion;
-	char* puntoMontajeTallgras;
-	char* ipBroker;
-	char* puertoBroker;
+    int tiempo_reintento_conexion;
+	int tiempo_reintento_operacion;
+	char* punto_montaje_tallgrass;
+	char* ip_broker;
+	char* puerto_broker;
 } t_config_team;
 
-typedef enum
-{
+typedef enum {
 	MENSAJE = 1,
 }op_code;
 
-typedef struct
-{
+typedef struct {
 	int size;
 	void* stream;
 } t_buffer;
 
-typedef struct
-{
+typedef struct {
 	op_code codigo_operacion;
 	t_buffer* buffer;
 } t_paquete;
