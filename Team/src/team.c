@@ -9,24 +9,19 @@
 
 int main(void)
 {
+		t_config* config = leer_config();
 	    int conexion;
-		char* ip;
-		char* puerto;
+		char* ip = config_get_string_value(config,"IP"); // ESTA DE PRUEBA PIBE POR ESO NO ES DEL BROKER
+		char* puerto =  config_get_string_value(config,"PUERTO");
 
-		t_log* logger;
-		t_config* config;
-
-		logger = iniciar_logger();
-		config = leer_config();
-		ip = config_get_string_value(config,"IP");
-		puerto = config_get_string_value(config,"PUERTO");
+		t_log* logger = iniciar_logger();
 
 	    conexion = crear_conexion(ip,puerto);
-		enviar_mensaje("hola",conexion);
+		enviar_mensaje("Hola",conexion);
 		liberar_conexion(conexion);
 
-		printf("El ip es : %s",ip);
-		printf("El port es : %s ",puerto);
+		log_info(logger,"El ip es : %s",ip);
+		log_info(logger,"El port es : %s ",puerto);
 		recibir_mensaje_cliente(conexion);
 		terminar_programa(conexion, logger, config);
 }

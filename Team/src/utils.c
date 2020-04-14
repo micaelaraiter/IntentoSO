@@ -88,11 +88,12 @@ void* recibir_mensaje(int socket_cliente, int* size)
 
 
 char* recibir_mensaje_cliente(int socket){
+
 	op_code operacion;
 	recv(socket,&operacion,sizeof(operacion),0);
 
 	int buffer_size;
-	recv(socket,&buffer_size,buffer_size,0);
+	recv(socket,buffer_size,buffer_size,0);
 
 	char* buffer = malloc(buffer_size);
 	recv(socket,buffer,buffer_size,0);
