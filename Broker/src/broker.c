@@ -5,7 +5,7 @@ int main(void) {
 
 		t_log* logger = iniciar_logger();
 
-		t_config_broker* datos_de_config = leer_config(logger);
+		t_config_broker* datos_de_config = leer_config();
 		// log_info(logger, "config leida");
 
 
