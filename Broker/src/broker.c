@@ -3,26 +3,15 @@
 
 int main(void) {
 
-	    int socket_team;
-	    int socket_gamecard;
-
 		t_log* logger = iniciar_logger();
 
-		// log_info(logger, "leer la config");
 		t_config_broker* datos_de_config = leer_config(logger);
-		// log_info(logger, "leer la config");
+		// log_info(logger, "config leida");
 
-		// log_info(logger, "socket team");
-	    socket_team = crear_conexion(datos_de_config -> ip_team, datos_de_config -> puerto_team);
-
-	    // log_info(logger, "socket gamecard");
-	    socket_gamecard = crear_conexion(datos_de_config -> ip_gamecard, datos_de_config -> puerto_gamecard);
-
-	    char* mensaje = mensaje;
 
 
 	    // log_info(logger, "terminar programa");
-		terminar_programa(socket_team, socket_gamecard, logger, datos_de_config);
+		terminar_programa(logger, datos_de_config);
 		// log_info(logger, "programa terminado");
 
 }
@@ -30,13 +19,13 @@ int main(void) {
 
 t_log* iniciar_logger(void) {
 
-	t_log* un_logger;
+	t_log* logger;
 
-	if((un_logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO)) == NULL){
+	if((logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO)) == NULL){
 		printf("fallo la creacion del logger\n");
 		exit(1);
 	}
-	return un_logger;
+	return logger;
 }
 
 t_config_broker* leer_config(t_log* logger) {
@@ -64,10 +53,8 @@ t_config_broker* leer_config(t_log* logger) {
 	 return config_broker;
 }
 
-void terminar_programa(int socket_team, int socket_gamecard, t_log* logger, t_config_broker* datos_de_config) {
+void terminar_programa(t_log* logger, t_config_broker* datos_de_config) {
 
 	free(datos_de_config);
-	liberar_conexion(socket_gamecard);
-	liberar_conexion(socket_team);
 	liberar_logger(logger);
 }

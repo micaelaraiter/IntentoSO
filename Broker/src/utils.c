@@ -23,29 +23,8 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	offset += paquete -> buffer -> size;
 
 	(*bytes) = malloc_size;
-
+	log_info(logger, "%d", bytes);
 	return _stream;
-}
-
-int crear_conexion(char *ip, char* puerto) {
-	struct addrinfo hints;
-	struct addrinfo *server_info;
-
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-
-	getaddrinfo(ip, puerto, &hints, &server_info);
-
-	int socket_cliente = socket(server_info -> ai_family, server_info -> ai_socktype, server_info -> ai_protocol);
-
-	if(connect(socket_cliente, server_info -> ai_addr, server_info -> ai_addrlen) == -1)
-		printf("error");
-
-	freeaddrinfo(server_info);
-
-	return socket_cliente;
 }
 
 void enviar_mensaje(char* mensaje, int socket_cliente)
@@ -74,7 +53,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 
 void* recibir_mensaje(int socket_cliente, int* size) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
-	void * buffer;
+	void* buffer = malloc(sizeof(t_buffer));
 
 	log_info(logger,"Recibiendo mensaje.");
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
@@ -166,8 +145,8 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	paquete->buffer->stream = malloc(paquete -> buffer -> size);
 	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
 
-	int bytes = paquete -> buffer -> size + 2*sizeof(int);
-	void* a_enviar = serializar_paquete(paquete, bytes);
+	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
+	void* a_enviar = serializar_paquete(paquete, &bytes);
 
 	send(socket_cliente, a_enviar, bytes, 0);
 

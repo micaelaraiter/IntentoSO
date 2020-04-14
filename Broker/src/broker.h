@@ -26,6 +26,6 @@ typedef struct {
 
 t_log* iniciar_logger(void);
 t_config_broker* leer_config(t_log* logger);
-void terminar_programa(int, int, t_log*, t_config_broker*);
+void terminar_programa(t_log*, t_config_broker*);
 
 #endif /* GAMECARD_H_ */
