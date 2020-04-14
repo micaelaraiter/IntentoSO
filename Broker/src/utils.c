@@ -12,19 +12,19 @@ extern int pthread_detach (pthread_t __th) __THROW;
  */
 void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	int malloc_size = paquete -> buffer -> size + sizeof(op_code) + sizeof(int);
-	void* _stream = malloc(malloc_size);
+	void* stream = malloc(malloc_size);
 	int offset = 0;
 
-	memcpy(_stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
+	memcpy(stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
 	offset += sizeof(paquete -> codigo_operacion);
-	memcpy(_stream + offset, &(paquete -> buffer -> size), sizeof(paquete -> buffer -> size));
+	memcpy(stream + offset, &(paquete -> buffer -> size), sizeof(paquete -> buffer -> size));
 	offset += sizeof(paquete -> buffer -> size);
-	memcpy(_stream + offset, paquete -> buffer -> stream, paquete -> buffer -> size);
+	memcpy(stream + offset, paquete -> buffer -> stream, paquete -> buffer -> size);
 	offset += paquete -> buffer -> size;
 
 	(*bytes) = malloc_size;
 	log_info(logger, "%d", bytes);
-	return _stream;
+	return stream;
 }
 
 void enviar_mensaje(char* mensaje, int socket_cliente)
@@ -92,7 +92,7 @@ void iniciar_servidor(char *IP, char *PUERTO) {
 	listen(socket_servidor, SOMAXCONN);
 
     freeaddrinfo(servinfo);
-    log_info(logger,"Servidor levantdo.");
+    log_info(logger,"Servidor levantado.");
     while(1)
     	esperar_cliente(socket_servidor);
 }
@@ -124,6 +124,10 @@ void process_request(int cod_op, int cliente_fd) {
 	switch (cod_op) {
 		case MENSAJE:
 			msg = recibir_mensaje(cliente_fd, &size);
+
+			//reenviar_mensaje(msg)
+			//msg = recv()
+
 			devolver_mensaje(msg, size, cliente_fd);
 			free(msg);
 			break;

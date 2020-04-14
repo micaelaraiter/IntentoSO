@@ -28,10 +28,8 @@ t_log* iniciar_logger(void) {
 	return logger;
 }
 
-t_config_broker* leer_config(t_log* logger) {
+t_config_broker* leer_config() {
 	t_config* config;
-
-	log_info(logger, "peso malloc config %d", sizeof(t_config_broker));
 
 	t_config_broker* config_broker = malloc(sizeof(t_config_broker));
 

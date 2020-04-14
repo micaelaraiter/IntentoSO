@@ -11,7 +11,6 @@
 #include "utils.h"
 
 typedef struct {
-	int conexion;
     int sizeMemoria;
 	int sizeMinMemoria;
 	char* algoritmoMemoria;
@@ -24,8 +23,9 @@ typedef struct {
 	int frecuenciaCompactacion;
 } t_config_broker;
 
+
 t_log* iniciar_logger(void);
-t_config_broker* leer_config(t_log* logger);
+t_config_broker* leer_config(void);
 void terminar_programa(t_log*, t_config_broker*);
 
 #endif /* GAMECARD_H_ */
