@@ -63,7 +63,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 
 	void* stream = serializar_paquete(paquete, paquete -> buffer -> size);
 
-	int header = sizeof(paquete -> codigo_operacion) + paquete-> buffer->size + sizeof(paquete -> buffer -> size);
+	int header = sizeof(paquete->codigo_operacion) + paquete->buffer->size + sizeof(paquete->buffer->size);
 
 	send(socket_cliente, stream, header, 0);
 
@@ -87,27 +87,6 @@ void* recibir_mensaje(int socket_cliente, int* size)
 }
 
 
-char* recibir_mensaje_cliente(int socket){
-
-	op_code operacion;
-	recv(socket,&operacion,sizeof(operacion),0);
-
-	int buffer_size;
-	recv(socket,buffer_size,buffer_size,0);
-
-	char* buffer = malloc(buffer_size);
-	recv(socket,buffer,buffer_size,0);
-
-	printf("Buffer size: %d",buffer_size);
-	printf("Op code: %d",operacion);
-
-
-	if(buffer[buffer_size-1] != '/0'){
-		printf("El buffer no es un string");
-	}
-
-	return buffer;
-}
 
 void liberar_conexion(int socket_cliente)
 {

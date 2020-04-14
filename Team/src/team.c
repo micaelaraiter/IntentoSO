@@ -22,7 +22,6 @@ int main(void)
 
 		log_info(logger,"El ip es : %s",ip);
 		log_info(logger,"El port es : %s ",puerto);
-		recibir_mensaje_cliente(conexion);
 		terminar_programa(conexion, logger, config);
 }
 
