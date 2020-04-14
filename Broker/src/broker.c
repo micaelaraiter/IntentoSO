@@ -5,13 +5,13 @@ int main(void) {
 
 		t_log* logger = iniciar_logger();
 
-		t_config_broker* datos_de_config = leer_config();
+		t_config_broker* config = leer_config();
 		// log_info(logger, "config leida");
 
 
 
 	    // log_info(logger, "terminar programa");
-		terminar_programa(logger, datos_de_config);
+		terminar_programa(logger, config);
 		// log_info(logger, "programa terminado");
 
 }
@@ -51,8 +51,7 @@ t_config_broker* leer_config() {
 	 return config_broker;
 }
 
-void terminar_programa(t_log* logger, t_config_broker* datos_de_config) {
-
-	free(datos_de_config);
+void terminar_programa(t_log* logger, t_config_broker* config) {
+	liberar_config(config);
 	liberar_logger(logger);
 }

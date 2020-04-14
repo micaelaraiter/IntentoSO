@@ -12,6 +12,19 @@
 #include<string.h>
 #include<pthread.h>
 
+typedef struct {
+    int sizeMemoria;
+	int sizeMinMemoria;
+	char* algoritmoMemoria;
+	char* algoritmoReemplazo;
+	char* algoritmoParticionLibre;
+	char* ip_team;
+	char* puerto_team;
+	char* ip_gamecard;
+	char* puerto_gamecard;
+	int frecuenciaCompactacion;
+} t_config_broker;
+
 typedef enum
 {
 	MENSAJE = 1,
@@ -46,6 +59,8 @@ int recibir_operacion(int);
 void process_request(int cod_op, int cliente_fd);
 
 void devolver_mensaje(void* payload, int size, int socket_cliente);
+
+void liberar_config(t_config_broker*);
 void liberar_conexion(int socket_cliente);
 void liberar_logger(t_log* logger);
 

@@ -161,6 +161,16 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	log_info(logger,"Mensaje devuelto");
 }
 
+void liberar_config(t_config_broker* config) {
+	free(config -> algoritmoMemoria);
+	free(config -> algoritmoReemplazo);
+	free(config -> algoritmoParticionLibre);
+	free(config -> ip_team);
+	free(config -> puerto_team);
+	free(config -> ip_gamecard);
+	free(config -> puerto_gamecard);
+	free(config);
+}
 
 void liberar_conexion(int socket_cliente) {
 	close(socket_cliente);

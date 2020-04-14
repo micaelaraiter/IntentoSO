@@ -1,5 +1,3 @@
-#ifndef GAMECARD_H_
-#define GAMECARD_H_
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -10,22 +8,6 @@
 
 #include "utils.h"
 
-typedef struct {
-    int sizeMemoria;
-	int sizeMinMemoria;
-	char* algoritmoMemoria;
-	char* algoritmoReemplazo;
-	char* algoritmoParticionLibre;
-	char* ip_team;
-	char* puerto_team;
-	char* ip_gamecard;
-	char* puerto_gamecard;
-	int frecuenciaCompactacion;
-} t_config_broker;
-
-
 t_log* iniciar_logger(void);
 t_config_broker* leer_config(void);
 void terminar_programa(t_log*, t_config_broker*);
-
-#endif /* GAMECARD_H_ */
