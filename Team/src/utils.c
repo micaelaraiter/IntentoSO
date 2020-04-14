@@ -15,7 +15,7 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
  {
 // cod_op|stream_size|stream
 	int malloc_size = bytes + sizeof(op_code) + sizeof(int);
-	void* _stream = malloc(malloc_size+1);
+	void* _stream = malloc(malloc_size);
 	int offset = 0;
 
 	memcpy(_stream+offset, &(paquete -> codigo_operacion), sizeof(paquete -> codigo_operacion));
@@ -53,13 +53,13 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 {
 	t_buffer* buffer = malloc(sizeof(t_buffer));
 
-	buffer -> size = strlen(mensaje) + 1; //para tener el cuenta el centinela
-	buffer->stream = malloc(buffer -> size);
+	buffer -> size = strlen(mensaje) + 1;
+	buffer -> stream = malloc(buffer -> size); //inicializo el stream puesto que es un puntero
 	memcpy(buffer->stream,mensaje,buffer->size);
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete -> codigo_operacion = MENSAJE;
-	paquete->buffer = buffer;
+	paquete -> buffer = buffer;
 
 	void* stream = serializar_paquete(paquete, paquete -> buffer -> size);
 
@@ -85,6 +85,8 @@ void* recibir_mensaje(int socket_cliente, int* size)
 	log_info(logger,"Mensaje recibido.");
 	return buffer;
 }
+
+
 
 void liberar_conexion(int socket_cliente)
 {
