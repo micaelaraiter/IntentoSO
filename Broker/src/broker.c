@@ -11,7 +11,7 @@ int main(void) {
 		datos_de_config=leer_config();
 
 
-	    iniciar_servidor(datos_de_config -> ip_team, datos_de_config -> puerto_team);
+	    iniciar_servidor("127.0.0.1", "6667");
 	    //socket_gamecard = crear_conexion(datos_de_config -> ip_gamecard, datos_de_config -> puerto_gamecard);
 
 		terminar_programa(socket_team, socket_gamecard, logger, datos_de_config);
