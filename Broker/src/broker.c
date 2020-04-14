@@ -35,7 +35,7 @@ t_config_broker* leer_config() {
 	config_broker -> puerto_team =strdup( config_get_string_value(config, "PUERTO_BROKER_TEAM"));
 	config_broker -> ip_gamecard = strdup(config_get_string_value(config, "IP_BROKER_GAMECARD"));
 	config_broker -> puerto_gamecard = strdup(config_get_string_value(config, "PUERTO_BROKER_GAMECARD"));
-	config_broker -> frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
+	//config_broker -> frecuenciaCompactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 
 	 config_destroy(config);
 
