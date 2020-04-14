@@ -9,7 +9,7 @@ int main(void)
 
 	int conexion = crear_conexion(config -> ipBroker, config -> puertoBroker);
 
-	enviar_mensaje("Hola",conexion);
+	enviar_mensaje("Hola", conexion);
 
 	log_info(logger,"El ip es : %s", config -> ipBroker);
 	log_info(logger,"El port es : %s ", config -> puertoBroker);
@@ -46,9 +46,8 @@ t_config_team* leer_config() {
 	 return config_team;
 }
 
-void terminar_programa(int conexion, t_log* logger, t_config* config)
-{
+void terminar_programa(int conexion, t_log* logger, t_config_team* config) {
+	liberar_config(config);
 	liberar_logger(logger);
-	config_destroy(config);
 	liberar_conexion(conexion);
 }

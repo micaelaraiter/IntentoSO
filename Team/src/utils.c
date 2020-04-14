@@ -176,6 +176,15 @@ void devolver_mensaje(void* payload, int size, int socket_cliente)
 	log_info(logger,"Mensaje devuelto");
 }
 
+void liberar_config(t_config_team* config) {
+	free(config -> tiempoReintentoConexion);
+	free(config -> tiempoReintentoOperacion);
+	free(config -> puntoMontajeTallgras);
+	free(config -> ipBroker);
+	free(config -> puertoBroker);
+	free(config);
+}
+
 void liberar_conexion(int socket_cliente) {
 	close(socket_cliente);
 }

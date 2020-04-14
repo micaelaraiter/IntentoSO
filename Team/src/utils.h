@@ -1,9 +1,3 @@
-/*
- * conexiones.h
- *
- *  Created on: 2 mar. 2019
- *      Author: utnso
- */
 
 #ifndef UTILS_H_
 #define UTILS_H_
@@ -18,6 +12,15 @@
 #include<commons/collections/list.h>
 #include<string.h>
 #include<pthread.h>
+
+
+typedef struct {
+    int tiempoReintentoConexion;
+	int tiempoReintentoOperacion;
+	char* puntoMontajeTallgras;
+	char* ipBroker;
+	char* puertoBroker;
+} t_config_team;
 
 typedef enum
 {
@@ -56,7 +59,8 @@ void process_request(int cod_op, int cliente_fd);
 void devolver_mensaje(void* payload, int size, int socket_cliente);
 int recibir_operacion(int);
 
+void liberar_config(t_config_team*);
 void liberar_conexion(int socket_cliente);
 void liberar_logger(t_log* logger);
-#endif /* UTILS_H_ */
 
+#endif /* UTILS_H_ */
