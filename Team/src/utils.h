@@ -55,8 +55,9 @@ void process_request(int cod_op, int cliente_fd);
 void devolver_mensaje(void* payload, int size, int socket_cliente);
 int recibir_operacion(int);
 
-void liberar_config(t_config_team*);
+
 void liberar_conexion(int socket_cliente);
 void liberar_logger(t_log* logger);
+
 
 #endif /* UTILS_H_ */

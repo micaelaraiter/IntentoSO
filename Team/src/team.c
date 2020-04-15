@@ -2,12 +2,14 @@
 
 int main(void) {
 	t_config_team* config = leer_config();
+	logger = iniciar_logger();
 
-	t_log* logger = iniciar_logger();
-
-	int conexion = crear_conexion(config -> ip_broker, config -> puerto_broker);
+	//int conexion = crear_conexion(config -> ip_broker, config -> puerto_broker);
+	int conexion = crear_conexion("127.0.0.1","5661");
 
 	enviar_mensaje("Hola", conexion);
+
+	//recibir_mensaje(conexion, 5);
 
 	log_info(logger, "El ip es : %s", config -> ip_broker);
 	log_info(logger, "El port es : %s ", config -> puerto_broker);
@@ -16,13 +18,12 @@ int main(void) {
 
 
 t_log* iniciar_logger(void) {
+
 	if (log_create("team.log", "team", 1, LOG_LEVEL_INFO) == NULL){
 		printf("ERROR EN LA CREACION DEL LOGGER/n");
 		exit(1);
 	}
-
 	return log_create("team.log", "team", 1, LOG_LEVEL_INFO);
-
 }
 
 t_config_team* leer_config() {
@@ -43,7 +44,7 @@ t_config_team* leer_config() {
 	 return config_team;
 }
 
-void terminar_programa(int conexion, t_log* logger, t_config_team* config) {
+void terminar_programa(int conexion,t_log* logger,t_config_team* config) {
 	liberar_config(config);
 	liberar_logger(logger);
 	liberar_conexion(conexion);

@@ -3,17 +3,17 @@
 int main(void) {
 
 		logger = iniciar_logger();
-		iniciar_servidor("127.0.0.1","35312");
+		iniciar_servidor("127.0.0.1","5661");
 
 
 //		t_config_broker* config = leer_config();
-//		// log_info(logger, "config leida");
+//		log_info(logger, "config leida");
 //
-//	    // log_info(logger, "terminar programa");
+//	    log_info(logger, "terminar programa");
 //		terminar_programa(logger, config);
-//		 log_info(logger, "programa terminado");
+//		log_info(logger, "programa terminado");
 
-		 return EXIT_SUCCESS;
+		 return 0;
 }
 
 t_log* iniciar_logger(void) {
