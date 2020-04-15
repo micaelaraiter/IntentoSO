@@ -30,7 +30,7 @@ t_config_team* leer_config() {
 
 	t_config_team* config_team = malloc(sizeof(t_config_team));
 
-	 config = config_create("Debug/broker.config");
+	 config = config_create("Debug/team.config");
 
 	 config_team -> tiempo_reintento_conexion = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
 	 config_team -> tiempo_reintento_operacion = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
