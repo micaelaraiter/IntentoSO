@@ -3,7 +3,7 @@
 int main(void) {
 
 		logger = iniciar_logger();
-		iniciar_servidor("127.0.0.1","4444");
+		iniciar_servidor("127.0.0.1","35312");
 
 
 //		t_config_broker* config = leer_config();
