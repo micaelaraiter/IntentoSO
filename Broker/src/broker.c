@@ -31,17 +31,17 @@ t_config_broker* leer_config() {
 
 	t_config_broker* config_broker = malloc(sizeof(t_config_broker));
 
-	 config = config_create("Debug/broker.config");
+	 config = config_create("broker.config");
 
 	 config_broker -> size_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
 	 config_broker -> size_min_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
-	 config_broker -> algoritmo_memoria = strdup(config_get_string_value(config, "ALGORITMO_MEMORIA"));
-	 config_broker -> algoritmo_reemplazo = strdup(config_get_string_value(config, "ALGORITMO_REEMPLAZO"));
-	 config_broker -> algoritmo_particion_libre = strdup(config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE"));
-	 config_broker -> ip_team = strdup(config_get_string_value(config, "IP_BROKER_TEAM"));
-	 config_broker -> puerto_team = strdup(config_get_string_value(config, "PUERTO_BROKER_TEAM"));
-	 config_broker -> ip_gamecard = strdup(config_get_string_value(config, "IP_BROKER_GAMECARD"));
-	 config_broker -> puerto_gamecard = strdup(config_get_string_value(config, "PUERTO_BROKER_GAMECARD"));
+	 config_broker -> algoritmo_memoria = config_get_string_value(config, "ALGORITMO_MEMORIA");
+	 config_broker -> algoritmo_reemplazo = config_get_string_value(config, "ALGORITMO_REEMPLAZO");
+	 config_broker -> algoritmo_particion_libre = config_get_string_value(config, "ALGORITMO_PARTICION_LIBRE");
+	 config_broker -> ip_team = config_get_string_value(config, "IP_BROKER_TEAM");
+	 config_broker -> puerto_team = config_get_string_value(config, "PUERTO_BROKER_TEAM");
+	 config_broker -> ip_gamecard = config_get_string_value(config, "IP_BROKER_GAMECARD");
+	 config_broker -> puerto_gamecard = config_get_string_value(config, "PUERTO_BROKER_GAMECARD");
 	 config_broker -> frecuencia_compactacion = config_get_int_value(config, "FRECUENCIA_COMPACTACION");
 
 	 config_destroy(config);

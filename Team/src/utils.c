@@ -48,6 +48,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente) {
 	buffer -> size = strlen(mensaje) + 1;
 	buffer -> stream = malloc(buffer -> size);
 	memcpy(buffer -> stream,mensaje,buffer -> size);
+	log_info(logger,"Armando paquete");
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete -> codigo_operacion = MENSAJE;
@@ -55,10 +56,11 @@ void enviar_mensaje(char* mensaje, int socket_cliente) {
 
 	int size_serializado;
 	void* stream = serializar_paquete(paquete, &size_serializado);
+	log_info(logger,"Paquete serializado con tamaño :%d",size_serializado);
 
 	// int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
 	send(socket_cliente, stream, size_serializado, 0);
-
+	log_info(logger,"Paquete enviado");
 	free(buffer -> stream);
 	free(buffer);
 	free(paquete);

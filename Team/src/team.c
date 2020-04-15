@@ -5,15 +5,17 @@ int main(void) {
 	logger = iniciar_logger();
 
 	//int conexion = crear_conexion(config -> ip_broker, config -> puerto_broker);
-	int conexion = crear_conexion("127.0.0.1","5661");
+	int socket = crear_conexion("127.0.0.1","5661");
 
-	enviar_mensaje("Hola", conexion);
 
-	//recibir_mensaje(conexion, 5);
+	enviar_mensaje("Hola", socket);
+
+	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
+
 
 	log_info(logger, "El ip es : %s", config -> ip_broker);
 	log_info(logger, "El port es : %s ", config -> puerto_broker);
-	terminar_programa(conexion, logger, config);
+	terminar_programa(socket, logger, config);
 }
 
 
