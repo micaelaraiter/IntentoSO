@@ -51,18 +51,16 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	free(stream);
 }
 
-void* recibir_mensaje(int socket_cliente, int* size) {
+void* recibir_mensaje(int socket_cliente, int size) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
-	void* buffer = malloc(sizeof(t_buffer));
-
+	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-	log_info(logger,"Tamaño de paquete recibido: %d",*size);
+	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
+	log_info(logger,"Tamaño de paquete recibido: %i",size);
 
-	buffer = malloc(*size);
-
-	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-	log_info(logger,"Mensaje recibido.");
+	buffer = malloc(size);
+	recv(socket_cliente, buffer, size, MSG_WAITALL);
+	log_info(logger,"Mensaje recibido: %s", buffer);
 	return buffer;
 }
 
@@ -127,10 +125,7 @@ void process_request(int cod_op, int cliente_fd) {
 
 	switch (cod_op) {
 		case MENSAJE:
-			msg = recibir_mensaje(cliente_fd, &size);
-
-			//reenviar_mensaje(msg)
-			//msg = recv()
+			recibir_mensaje(cliente_fd, size);
 
 			devolver_mensaje(msg, size, cliente_fd);
 			free(msg);

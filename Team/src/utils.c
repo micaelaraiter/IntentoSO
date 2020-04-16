@@ -18,6 +18,9 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 
 	(*bytes) = malloc_size;
 	log_info(logger, "%d", bytes);
+	log_info(logger, "cod op a enviar %i", paquete -> codigo_operacion);
+	log_info(logger, "tam a enviar %i", paquete -> buffer -> size);
+	log_info(logger, "mensaje a enviar %s", paquete -> buffer -> stream);
 	return stream;
 }
 
@@ -57,8 +60,6 @@ void enviar_mensaje(char* mensaje, int socket_cliente) {
 	int size_serializado;
 	void* stream = serializar_paquete(paquete, &size_serializado);
 	log_info(logger,"Paquete serializado con tamaño :%d",size_serializado);
-
-	// int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
 	send(socket_cliente, stream, size_serializado, 0);
 	log_info(logger,"Paquete enviado");
 	free(buffer -> stream);
@@ -67,17 +68,17 @@ void enviar_mensaje(char* mensaje, int socket_cliente) {
 	free(stream);
 }
 
-void* recibir_mensaje(int socket_cliente, int* size) {
+void* recibir_mensaje(int socket_cliente, int size) {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
-	log_info(logger,"Tamaño de paquete recibido: %d",*size);
+	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
+	log_info(logger,"Tamaño de paquete recibido: %d",size);
 
-	buffer = malloc(*size);
+	buffer = malloc(size);
 
-	recv(socket_cliente, buffer, *size, MSG_WAITALL);
+	recv(socket_cliente, buffer, size, MSG_WAITALL);
 	log_info(logger,"Mensaje recibido.");
 
 	return buffer;
@@ -144,7 +145,7 @@ void process_request(int cod_op, int cliente_fd) {
 
 	switch (cod_op) {
 		case MENSAJE:
-			msg = recibir_mensaje(cliente_fd, &size);
+			msg = recibir_mensaje(cliente_fd, size);
 			devolver_mensaje(msg, size, cliente_fd);
 			free(msg);
 			break;

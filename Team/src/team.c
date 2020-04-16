@@ -8,7 +8,7 @@ int main(void) {
 	int socket = crear_conexion("127.0.0.1","5661");
 
 
-	enviar_mensaje("Hola", socket);
+	enviar_mensaje("Get Pokemon", socket);
 
 	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
 
