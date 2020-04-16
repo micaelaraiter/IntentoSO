@@ -46,8 +46,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente);
 
 //server
 void eliminar_paquete(t_paquete* paquete);
-void* recibir_mensaje(int socket_cliente, int size);
-void* recibir_buffer(int*, int); /// este no esta definido en utils.c
+void* recibir_mensaje(int socket_cliente, int* size);
 void iniciar_servidor(char *IP, char *PUERTO);
 void esperar_cliente(int);
 void serve_client(int *socket);

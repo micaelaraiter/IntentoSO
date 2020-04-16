@@ -31,7 +31,7 @@ t_config_broker* leer_config() {
 
 	t_config_broker* config_broker = malloc(sizeof(t_config_broker));
 
-	 config = config_create("broker.config");
+	 config = config_create("Debug/broker.config");
 
 	 config_broker -> size_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
 	 config_broker -> size_min_memoria = config_get_int_value(config, "TAMANO_MEMORIA");

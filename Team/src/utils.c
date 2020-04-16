@@ -68,19 +68,16 @@ void enviar_mensaje(char* mensaje, int socket_cliente) {
 	free(stream);
 }
 
-void* recibir_mensaje(int socket_cliente, int size) {
-	t_paquete* paquete = malloc(sizeof(t_paquete));
+void* recibir_mensaje(int socket_cliente, int* size) {
+	//t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
-
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
-	log_info(logger,"Tamaño de paquete recibido: %d",size);
+	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
+	log_info(logger,"Tamaño de paquete recibido: %i", *size);
 
-	buffer = malloc(size);
-
-	recv(socket_cliente, buffer, size, MSG_WAITALL);
-	log_info(logger,"Mensaje recibido.");
-
+	buffer = malloc(*size);
+	recv(socket_cliente, buffer, *size, MSG_WAITALL);
+	log_info(logger,"Mensaje recibido: %s", buffer);
 	return buffer;
 }
 
@@ -145,8 +142,10 @@ void process_request(int cod_op, int cliente_fd) {
 
 	switch (cod_op) {
 		case MENSAJE:
-			msg = recibir_mensaje(cliente_fd, size);
-			devolver_mensaje(msg, size, cliente_fd);
+			msg = malloc(12);
+			msg = recibir_mensaje(cliente_fd, &size);
+			// TEAM NO VA A DEVOLVER MSG, VA A "REENVIAR MENSAJE" (ANTE ALGO PROVENIENTE DEL GAMEBOY)
+			// reenviar_mensaje(msg, size, config -> a_donde, );
 			free(msg);
 			break;
 		case 0:
@@ -156,28 +155,6 @@ void process_request(int cod_op, int cliente_fd) {
 	}
 }
 
-void devolver_mensaje(void* payload, int size, int socket_cliente) {
-	log_info(logger,"Devolviendo mensaje");
-	t_paquete* paquete = malloc(sizeof(t_paquete));
-
-	paquete -> codigo_operacion = MENSAJE;
-	paquete -> buffer = malloc(sizeof(t_buffer));
-	paquete -> buffer -> size = size;
-	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
-	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
-
-	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
-	void* a_enviar = serializar_paquete(paquete, &bytes);
-
-	send(socket_cliente, a_enviar, bytes, 0);
-
-	free(a_enviar);
-	free(paquete -> buffer -> stream);
-	free(paquete -> buffer);
-	free(paquete);
-
-	log_info(logger,"Mensaje devuelto");
-}
 
 void liberar_config(t_config_team* config) {
 	free(config -> punto_montaje_tallgrass);
