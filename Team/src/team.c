@@ -20,11 +20,13 @@ int main(void) {
 
 t_log* iniciar_logger(void) {
 
-	if (log_create("team.log", "team", 1, LOG_LEVEL_INFO) == NULL){
+	t_log* logger = log_create("team.log", "team", 1, LOG_LEVEL_INFO);
+
+	if (logger == NULL){
 		printf("ERROR EN LA CREACION DEL LOGGER/n");
 		exit(1);
 	}
-	return log_create("team.log", "team", 1, LOG_LEVEL_INFO);
+	return logger;
 }
 
 t_config_team* leer_config() {

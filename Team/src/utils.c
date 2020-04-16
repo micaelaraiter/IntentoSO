@@ -17,7 +17,7 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	offset += paquete -> buffer -> size;
 
 	(*bytes) = malloc_size;
-	log_info(logger, "%d", bytes);
+	log_info(logger, "bytes: %d", *bytes);
 	log_info(logger, "cod op a enviar %i", paquete -> codigo_operacion);
 	log_info(logger, "tam a enviar %i", paquete -> buffer -> size);
 	log_info(logger, "mensaje a enviar %s", paquete -> buffer -> stream);

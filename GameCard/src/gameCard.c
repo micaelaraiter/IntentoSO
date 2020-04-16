@@ -1,47 +1,53 @@
-/*
- * main.c
- *
- *  Created on: 28 feb. 2019
- *      Author: utnso
- */
-
 #include "gameCard.h"
 
-int main(void)
-{
-	    int conexion;
-		char* ip = string_new();
-		char* puerto= string_new();
+int main(void) {
+	t_config_gameCard* config = leer_config();
+	logger = iniciar_logger();
 
-		t_log* logger;
-		t_config* config;
+	int socket = crear_conexion(config -> ip_broker, config -> puerto_broker);
 
-		logger = iniciar_logger();
-		config = leer_config();
-		string_append(&ip,config_get_string_value(config, "IP_BROKER"));
-		string_append(&puerto, config_get_string_value(config, "PUERTO_BROKER"));
 
-	    //conexion = crear_conexion(ip, puerto);
+	enviar_mensaje("Get Pokemon", socket);
 
-		terminar_programa(conexion, logger, config);
+	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
+
+
+	log_info(logger, "El ip es : %s", config -> ip_broker);
+	log_info(logger, "El port es : %s ", config -> puerto_broker);
+	terminar_programa(socket, logger, config);
 }
 
 
-t_log* iniciar_logger(void)
-{
-	return log_create("gameCard.log","gameCard",1,LOG_LEVEL_INFO);
+t_log* iniciar_logger(void) {
+
+	t_log* logger = log_create("gameCard.log", "gameCard", 1, LOG_LEVEL_INFO);
+
+	if (logger == NULL){
+		printf("ERROR EN LA CREACION DEL LOGGER/n");
+		exit(1);
+	}
+	return logger;
 }
 
+t_config_gameCard* leer_config() {
 
-t_config* leer_config(void)
-{
-	return config_create("Debug/gameCard.config");
-}
+	t_config_gameCard* config_gameCard = malloc(sizeof(t_config_gameCard));
 
-void terminar_programa(int conexion, t_log* logger, t_config* config)
-{
-	log_destroy(logger);
+	t_config* config = config_create("Debug/gameCard.config");
+
+	config_gameCard -> tiempo_reintento_conexion = config_get_int_value(config, "TIEMPO_DE_REINTENTO_CONEXION");
+	config_gameCard -> tiempo_reintento_operacion = config_get_int_value(config, "TIEMPO_DE_REINTENTO_OPERACION");
+	config_gameCard -> punto_montaje_tallgrass = strdup(config_get_string_value(config, "PUNTO_MONTAJE_TALLGRASS"));
+	config_gameCard -> ip_broker = strdup(config_get_string_value(config, "IP_BROKER"));
+	config_gameCard -> puerto_broker = strdup(config_get_string_value(config, "PUERTO_BROKER"));
+
 	config_destroy(config);
-	//liberar_conexion(conexion);
-	//Y por ultimo, para cerrar, hay que liberar lo que utilizamos (conexion, log y config) con las funciones de las commons y del TP mencionadas en el enunciado
+
+	return config_gameCard;
+}
+
+void terminar_programa(int conexion,t_log* logger,t_config_gameCard* config) {
+	liberar_config(config);
+	liberar_logger(logger);
+	liberar_conexion(conexion);
 }
