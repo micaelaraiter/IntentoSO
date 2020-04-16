@@ -22,7 +22,7 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	offset += paquete -> buffer -> size;
 
 	(*bytes) = malloc_size;
-	log_info(logger, "%d", bytes);
+	log_info(logger, "bytes: %d", *bytes);
 
 	return stream;
 }
@@ -51,15 +51,15 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	free(stream);
 }
 
-void* recibir_mensaje(int socket_cliente, int size) {
-	t_paquete* paquete = malloc(sizeof(t_paquete));
+void* recibir_mensaje(int socket_cliente, int* size) {
+	//t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
-	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
-	log_info(logger,"Tamaño de paquete recibido: %i",size);
+	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
+	log_info(logger,"Tamaño de paquete recibido: %i", *size);
 
-	buffer = malloc(size);
-	recv(socket_cliente, buffer, size, MSG_WAITALL);
+	buffer = malloc(*size);
+	recv(socket_cliente, buffer, *size, MSG_WAITALL);
 	log_info(logger,"Mensaje recibido: %s", buffer);
 	return buffer;
 }
@@ -114,7 +114,6 @@ void serve_client(int* socket) {
 
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
-	printf("el valor de socket es : %d", (int)* (socket));
 }
 
 void process_request(int cod_op, int cliente_fd) {
@@ -124,8 +123,9 @@ void process_request(int cod_op, int cliente_fd) {
 	log_info(logger,"Codigo de operacion %d",cod_op);
 
 	switch (cod_op) {
-		case MENSAJE:
-			recibir_mensaje(cliente_fd, size);
+		case MENSAJE: // EJ: ATRAPAR_POKEMON
+			msg = malloc(12); // EJ: TAMAÑO_PAQUETE_ATRAPAR_POKEMON
+			msg = recibir_mensaje(cliente_fd, &size);
 
 			devolver_mensaje(msg, size, cliente_fd);
 			free(msg);
@@ -138,8 +138,10 @@ void process_request(int cod_op, int cliente_fd) {
 }
 
 void devolver_mensaje(void* payload, int size, int socket_cliente) {
-	log_info(logger,"Devolviendo mensaje");
-
+	log_info(logger, "Devolviendo mensaje");
+	log_info(logger, "size: %d", size);
+	log_info(logger, "socket_cliente: %d", socket_cliente);
+	log_info(logger, "payload: %s", (char*) payload);
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
 	paquete -> codigo_operacion = MENSAJE;
@@ -164,9 +166,8 @@ void liberar_config(t_config_broker* config) {
 	free(config -> algoritmo_memoria);
 	free(config -> algoritmo_reemplazo);
 	free(config -> algoritmo_particion_libre);
-	free(config -> ip_team);
+	free(config -> ip_broker);
 	free(config -> puerto_team);
-	free(config -> ip_gamecard);
 	free(config -> puerto_gamecard);
 	free(config);
 }
