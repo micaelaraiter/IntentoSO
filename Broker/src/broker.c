@@ -17,9 +17,9 @@ int main(void) {
 }
 
 t_log* iniciar_logger(void) {
-	t_log* logger;
+	t_log* logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO);
 
-	if((logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO)) == NULL){
+	if(logger == NULL){
 		printf("fallo la creacion del logger\n");
 		exit(1);
 	}
@@ -31,7 +31,7 @@ t_config_broker* leer_config() {
 
 	t_config_broker* config_broker = malloc(sizeof(t_config_broker));
 
-	 config = config_create("Debug/broker.config");
+	 config = config_create("broker.config");
 
 	 config_broker -> size_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
 	 config_broker -> size_min_memoria = config_get_int_value(config, "TAMANO_MEMORIA");
