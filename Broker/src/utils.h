@@ -26,6 +26,21 @@ typedef struct {
 
 typedef enum {
 	MENSAJE = 1,
+	//Team a Broker
+	TE_GET_POKEMON_BR = 1,
+	TE_CATCH_POKEMON_BR = 2,
+	//Gamecard a Broker
+	GC_LOCALIZED_POKEMON_BR = 3,
+	GC_CAUGHT_POKEMON_BR = 4,
+	//Gameboy a Team
+	GB_APPEARED_POKEMON_TE = 5,
+	//Gameboy a Gamecard
+	GB_NEW_POKEMON_GC = 6,
+	GB_GET_POKEMON_GC = 7,
+	GB_CATCH_POKEMON_GC = 8,
+	//Gameboy a Broker
+	GB_NEW_POKEMON_BR = 9,
+	GB_CAUGHT_POKEMON_BR = 10,
 }op_code;
 
 typedef struct {
