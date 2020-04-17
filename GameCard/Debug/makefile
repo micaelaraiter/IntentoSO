@@ -1,40 +1,43 @@
-# Como nos conviene armar un makefile?
-# Primero podemos definir algunas constantes que vamos a usar muchas veces
-# Como por ejemplo, bibliotecas, flags, el compilador (el "CC")
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
 
-TARGET = GameCard # Definimos la tarea que va a ejecutar make por defecto Y el nombre del binario final
-LIBS = -lreadline -lcommons # Incluimos las bibliotecas que necesitamos, las commons y readline
-CC = gcc # Vamos a usar gcc como compilador, porque nos encanta!
-CFLAGS = -g -Wall # Compilamos con los flags -g (con simbolos de debug) y -Wall (que nos muestre todos los warnings)
+-include ../makefile.init
 
-# Ahora creemos las tareas del makefile
-# Cuando hagamos make sin argumentos, se ejecutará la tarea por default
-# Mientras que si le pasamos un argumento, ejecutará la tarea con ese nombre
-# como por ejemplo make all o make clean
+RM := rm -rf
 
-.PHONY: default all clean
-# Esta regla .PHONY es para decirle a make que si hay archivos con nombres similares
-# a alguna regla, que entonces no asuma que el argumento es el archivo, sino que es la regla
-# dado que va a tratar de tomar el archivo y no la regla por defecto
+# All of the sources participating in the build are defined here
+-include sources.mk
+-include src/subdir.mk
+-include subdir.mk
+-include objects.mk
 
-default: $(TARGET) # la regla por defecto (tp0)
-all: default # Si ejecutan all, que ejecute la default
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(C_DEPS)),)
+-include $(C_DEPS)
+endif
+endif
 
-# Definamos un par de constantes mas, OBJECTS (que vamos a usar para generar los .o)
-# y HEADERS, para incluir los headers que definamos.
-# Nota: wildcard implica que seleccione todos los que cumplen con la regex (osea todos los que terminen con .h)
+-include ../makefile.defs
 
-OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c))
-HEADERS = $(wildcard *.h)
+# Add inputs and outputs from these tool invocations to the build variables 
 
-%.o: %.c $(HEADERS) # Las variables que le pasamos a la tarea, le decimos que use todos los .c y todos los .h
-	$(CC) $(CFLAGS) -c $< -o $@ # Creamos los objects sin linkear
+# All Target
+all: GameCard
 
-.PRECIOUS: $(TARGET) $(OBJECTS) # Nos permite mantener los archivos temporales terminados si matan a make con Cntl-C
+# Tool invocations
+GameCard: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	gcc  -o "GameCard" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
 
-$(TARGET): $(OBJECTS) # Le pasamos a la tarea los objects ya compilados
-	$(CC) $(OBJECTS) $(CFLAGS) $(LIBS) -o $@ # Usamos el compilador para linkear los objects a las bibliotecas y tener nuestro binario
+# Other Targets
+clean:
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) GameCard
+	-@echo ' '
 
-clean: # Finalmente creamos una tarea para eliminar todos los .o y el binario
-	-rm -f *.o
-	-rm -f $(TARGET)
+.PHONY: all clean dependents
+
+-include ../makefile.targets
