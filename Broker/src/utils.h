@@ -19,8 +19,7 @@ typedef struct {
 	char* algoritmo_reemplazo;
 	char* algoritmo_particion_libre;
 	char* ip_broker;
-	char* puerto_team;
-	char* puerto_gamecard;
+	char* puerto;
 	int frecuencia_compactacion;
 } t_config_broker;
 

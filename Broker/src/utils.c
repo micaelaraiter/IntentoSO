@@ -168,8 +168,7 @@ void liberar_config(t_config_broker* config) {
 	free(config -> algoritmo_reemplazo);
 	free(config -> algoritmo_particion_libre);
 	free(config -> ip_broker);
-	free(config -> puerto_team);
-	free(config -> puerto_gamecard);
+	free(config -> puerto);
 	free(config);
 }
 
