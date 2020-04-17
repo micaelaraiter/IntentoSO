@@ -90,7 +90,8 @@ void iniciar_servidor(char *IP, char *PUERTO) {
 	listen(socket_servidor, SOMAXCONN);
 
     freeaddrinfo(servinfo);
-    log_info(logger,"Servidor levantado.");
+    log_info(logger, "Puerto: %s", PUERTO);
+    log_info(logger, "Servidor levantado.");
     while(1)
     	esperar_cliente(socket_servidor);
 }
