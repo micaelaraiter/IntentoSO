@@ -5,6 +5,7 @@ int main(void) {
 		logger = iniciar_logger();
 		t_config_broker* config = leer_config();
 		log_info(logger, "IP: %s", config -> ip_broker);
+		iniciar_servidor(config -> ip_broker, config -> puerto_gamecard);
 		iniciar_servidor(config -> ip_broker, config -> puerto_team);
 
 //		log_info(logger, "config leida");
