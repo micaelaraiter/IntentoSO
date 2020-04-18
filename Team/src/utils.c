@@ -72,9 +72,6 @@ void* recibir_mensaje(int socket_cliente, int* size) {
 	//t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
-	op_code codigoOperacion;
-	recv(socket_cliente, &codigoOperacion, sizeof(op_code), MSG_WAITALL);
-	log_info(logger,"el  codigoOperacion: %i", codigoOperacion );
 
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
 	log_info(logger,"Tamaño de paquete recibido: %i", *size);
