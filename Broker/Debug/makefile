@@ -25,11 +25,14 @@ endif
 # All Target
 all: Broker
 
+dependents:
+	-cd /home/utnso/workspace/IntentoSO/utils/Debug && $(MAKE) clean all
+
 # Tool invocations
-Broker: $(OBJS) $(USER_OBJS)
+Broker: $(OBJS) $(USER_OBJS) /home/utnso/workspace/IntentoSO/utils/Debug/libutils.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc  -o "Broker" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L"/home/utnso/workspace/IntentoSO/utils/Debug" -o "Broker" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -39,5 +42,6 @@ clean:
 	-@echo ' '
 
 .PHONY: all clean dependents
+/home/utnso/workspace/IntentoSO/utils/Debug/libutils.so:
 
 -include ../makefile.targets
