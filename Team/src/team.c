@@ -1,6 +1,7 @@
 #include "team.h"
 
 int main(void) {
+
 	t_config_team* config = leer_config();
 	logger = iniciar_logger();
 
@@ -10,8 +11,10 @@ int main(void) {
 	enviar_mensaje("Get Pokemon", socket);
 
 	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
-
-
+	int size;
+	void* mensaje= malloc(12);
+    mensaje = recibir_mensaje(socket,&size);
+    free(mensaje);
 	log_info(logger, "El ip es : %s", config -> ip_broker);
 	log_info(logger, "El port es : %s ", config -> puerto_broker);
 	terminar_programa(socket, logger, config);
