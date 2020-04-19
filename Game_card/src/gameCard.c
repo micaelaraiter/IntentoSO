@@ -47,7 +47,7 @@ t_config_gameCard* leer_config() {
 }
 
 void terminar_programa(int conexion,t_log* logger,t_config_gameCard* config) {
-	liberar_config(config);
+	liberar_config_gameCard(config);
 	liberar_logger(logger);
 	liberar_conexion(conexion);
 }

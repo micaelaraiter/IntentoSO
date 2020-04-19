@@ -1,11 +1,5 @@
 #include "utils.h"
 
-extern int pthread_create (pthread_t *__restrict __newthread,
-			   	   	   	   const pthread_attr_t *__restrict __attr,
-						   void *(*__start_routine) (void *),
-						   void *__restrict __arg) __THROWNL __nonnull ((1, 3));
-extern int pthread_detach (pthread_t __th) __THROW;
-
 /* Recibe un paquete a serializar, y un puntero a un int en el que dejar
  * el tamaño del stream de bytes serializados que devuelve
  */
@@ -23,8 +17,33 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 
 	(*bytes) = malloc_size;
 	log_info(logger, "bytes: %d", *bytes);
+	log_info(logger, "cod op a enviar %i", paquete -> codigo_operacion);
+	log_info(logger, "tam a enviar %i", paquete -> buffer -> size);
+	log_info(logger, "mensaje a enviar %s", paquete -> buffer -> stream);
+	return stream;
 
 	return stream;
+}
+
+int crear_conexion(char *ip, char* puerto) {
+	struct addrinfo hints;
+	struct addrinfo *server_info;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
+
+	getaddrinfo(ip, puerto, &hints, &server_info);
+
+	int socket_cliente = socket(server_info -> ai_family, server_info -> ai_socktype, server_info -> ai_protocol);
+
+	if(connect(socket_cliente, server_info -> ai_addr, server_info -> ai_addrlen) == -1)
+		printf("error");
+
+	freeaddrinfo(server_info);
+
+	return socket_cliente;
 }
 
 void enviar_mensaje(char* mensaje, int socket_cliente)
@@ -34,6 +53,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	buffer -> size = strlen(mensaje) + 1;
 	buffer -> stream = malloc(buffer -> size);
 	memcpy(buffer -> stream,mensaje,buffer -> size);
+	log_info(logger,"Armando paquete");
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete -> codigo_operacion = MENSAJE;
@@ -41,10 +61,9 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 
 	int size_serializado;
 	void* stream = serializar_paquete(paquete, &size_serializado);
-
-	// int header = sizeof(paquete -> codigo_operacion) + paquete -> buffer -> size + sizeof(paquete -> buffer -> size);
+	log_info(logger,"Paquete serializado con tamaño :%d",size_serializado);
 	send(socket_cliente, stream, size_serializado, 0);
-
+	log_info(logger,"Paquete enviado");
 	free(buffer -> stream);
 	free(buffer);
 	free(paquete);
@@ -55,6 +74,10 @@ void* recibir_mensaje(int socket_cliente, int* size) {
 	//t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
 	log_info(logger,"Recibiendo mensaje.");
+	op_code codigoOperacion;
+	recv(socket_cliente, &codigoOperacion, sizeof(op_code), MSG_WAITALL);
+	log_info(logger,"el  codigoOperacion: %i", codigoOperacion );
+
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
 	log_info(logger,"Tamaño de paquete recibido: %i", *size);
 
@@ -102,7 +125,7 @@ void esperar_cliente(int socket_servidor) {
 	int tam_direccion = sizeof(struct sockaddr_in);
 	int socket_cliente = accept(socket_servidor, (void*) &dir_cliente, &tam_direccion);
 
-	pthread_create(&thread,NULL,(void*)serve_client,&socket_cliente);
+	pthread_create(&thread, NULL, (void*)serve_client, &socket_cliente);
 	pthread_detach(thread);
 
 }
@@ -137,6 +160,28 @@ void process_request(int cod_op, int cliente_fd) {
 			pthread_exit(NULL);
 	}
 }
+/*
+void process_request(int cod_op, int cliente_fd) {
+	int size;
+	void* msg;
+
+	log_info(logger,"Codigo de operacion %d",cod_op);
+
+	switch (cod_op) {
+		case MENSAJE:
+			msg = malloc(12);
+			msg = recibir_mensaje(cliente_fd, &size);
+			// TEAM NO VA A DEVOLVER MSG, VA A "REENVIAR MENSAJE" (ANTE ALGO PROVENIENTE DEL GAMEBOY)
+			// reenviar_mensaje(msg, size, config -> a_donde, );
+			free(msg);
+			break;
+		case 0:
+			pthread_exit(NULL);
+		case -1:
+			pthread_exit(NULL);
+	}
+}
+*/
 
 void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	log_info(logger, "Devolviendo mensaje");
@@ -163,7 +208,7 @@ void devolver_mensaje(void* payload, int size, int socket_cliente) {
 	log_info(logger,"Mensaje devuelto");
 }
 
-void liberar_config(t_config_broker* config) {
+void liberar_config_broker(t_config_broker* config) {
 	free(config -> algoritmo_memoria);
 	free(config -> algoritmo_reemplazo);
 	free(config -> algoritmo_particion_libre);
@@ -171,6 +216,22 @@ void liberar_config(t_config_broker* config) {
 	free(config -> puerto);
 	free(config);
 }
+
+void liberar_config_gameCard(t_config_gameCard* config) {
+	free(config -> punto_montaje_tallgrass);
+	free(config -> ip_broker);
+	free(config -> puerto_broker);
+	free(config);
+}
+
+void liberar_config_team(t_config_team* config) {
+	free(config -> punto_montaje_tallgrass);
+	free(config -> ip_broker);
+	free(config -> puerto_broker);
+	free(config);
+}
+
+//SUGERENCIA: Hacer un unico liberar_config con un case de acuerdo al tipo de config que recibe.
 
 void liberar_conexion(int socket_cliente) {
 	close(socket_cliente);

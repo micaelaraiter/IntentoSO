@@ -50,7 +50,7 @@ t_config_team* leer_config() {
 }
 
 void terminar_programa(int conexion,t_log* logger,t_config_team* config) {
-	liberar_config(config);
+	liberar_config_team(config);
 	liberar_logger(logger);
 	liberar_conexion(conexion);
 }

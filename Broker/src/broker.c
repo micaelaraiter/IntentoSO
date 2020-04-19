@@ -49,6 +49,6 @@ t_config_broker* leer_config() {
 }
 
 void terminar_programa(t_log* logger, t_config_broker* config) {
-	liberar_config(config);
+	liberar_config_broker(config);
 	liberar_logger(logger);
 }
