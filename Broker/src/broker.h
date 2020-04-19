@@ -5,8 +5,7 @@
 #include<commons/string.h>
 #include<commons/config.h>
 #include<readline/readline.h>
-#include<utils.c>
-
+#include<utils.h>
 
 t_log* logger;
 t_log* iniciar_logger(void);

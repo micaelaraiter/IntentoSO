@@ -138,6 +138,7 @@ void serve_client(int* socket) {
 
 	log_info(logger,"Se conecto un cliente con socket: %d",*socket);
 	process_request(cod_op, *socket);
+	close(*socket);
 }
 
 void process_request(int cod_op, int cliente_fd) {
