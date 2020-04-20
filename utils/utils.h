@@ -37,10 +37,9 @@ typedef struct {
 	char* punto_montaje_tallgrass;
 	char* ip_broker;
 	char* puerto_broker;
-} t_config_gameCard;
+} t_config_game_card;
 
 typedef enum {
-	MENSAJE = 1,
 	//Team a Broker
 	TE_GET_POKEMON_BR = 1,
 	TE_CATCH_POKEMON_BR = 2,
@@ -56,7 +55,57 @@ typedef enum {
 	//Gameboy a Broker
 	GB_NEW_POKEMON_BR = 9,
 	GB_CAUGHT_POKEMON_BR = 10,
+	//Broker a Cola - Gamecard
+	BR_GET_POKEMON_GC = 11,
+	BR_CATCH_POKEMON_GC = 12,
+	BR_NEW_POKEMON_GC = 13,
+	//Broker a Cola - Team
+	BR_LOCALIZED_POKEMON_TE = 14,
+	BR_CAUGHT_POKEMON_TE = 15, // A ESTE LO PUEDEN ACCEDER PROVINIENDO DE GC O GB.
 }op_code;
+
+typedef struct {
+	int id_mensaje;
+	int pokemon;
+	int posicion[2];
+	int cantidad;
+} t_new_pokemon;
+
+typedef struct {
+	int id_mensaje;
+	int pokemon;
+	int posicion[2];
+} t_catch_pokemon;
+
+typedef struct {
+	int id_mensaje;
+	int pokemon;
+} t_get_pokemon;
+
+typedef struct {
+	int id_mensaje;
+	int pokemon;
+	int posicion[2];
+} t_appeared_pokemon;
+
+typedef struct {
+	int id_mensaje;
+	int resultado;
+} t_caught_pokemon;
+
+typedef struct {
+	int pokemon;
+	int posicion[2];
+	int cantidad;
+	int* next;
+	// capaz tengamos q agregar un int* previous;
+} t_lista_pokemons;
+
+typedef struct {
+	int id_mensaje;
+	int pokemon;
+	t_lista_pokemons* lista_pokemons; //rever esto
+} t_localized_pokemon;
 
 typedef struct {
 	int size;
@@ -76,17 +125,21 @@ void* recibir_buffer(int*, int); /// este no esta definido en utils.c
 //client
 void* serializar_paquete(t_paquete* paquete, int* bytes);
 int crear_conexion(char* ip, char* puerto);
-void enviar_mensaje(char* mensaje, int socket_cliente);
+
 
 //server
 void eliminar_paquete(t_paquete* paquete);
-void* recibir_mensaje(int socket_cliente, int* size);
 void iniciar_servidor(char *IP, char *PUERTO);
 void esperar_cliente(int);
 void serve_client(int *socket);
 void process_request(int cod_op, int cliente_fd);
-void devolver_mensaje(void* payload, int size, int socket_cliente);
 int recibir_operacion(int);
+
+//mensaje
+void enviar_mensaje(int cod_op, char* mensaje, int socket_cliente);
+void* recibir_mensaje(int socket_cliente, int* size);
+void devolver_mensaje(int cod_op, int size, void* payload, int socket_cliente);
+void reenviar_mensaje(int cod_op, int size, void* payload, int socket_cliente);
 
 
 void liberar_conexion(int socket_cliente);

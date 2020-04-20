@@ -1,5 +1,6 @@
-src/broker.o: ../src/broker.c ../src/broker.h ../src/utils.h
+src/broker.o: ../src/broker.c ../src/broker.h \
+ /home/utnso/workspace/IntentoSO/utils/utils.h
 
 ../src/broker.h:
 
-../src/utils.h:
+/home/utnso/workspace/IntentoSO/utils/utils.h:

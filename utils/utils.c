@@ -46,8 +46,7 @@ int crear_conexion(char *ip, char* puerto) {
 	return socket_cliente;
 }
 
-void enviar_mensaje(char* mensaje, int socket_cliente)
-{
+void enviar_mensaje(int cod_op, char* mensaje, int socket_cliente) {
 	t_buffer* buffer = malloc(sizeof(t_buffer));
 
 	buffer -> size = strlen(mensaje) + 1;
@@ -56,7 +55,7 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	log_info(logger,"Armando paquete");
 
 	t_paquete* paquete = malloc(sizeof(t_paquete));
-	paquete -> codigo_operacion = MENSAJE;
+	paquete -> codigo_operacion = cod_op;
 	paquete -> buffer = buffer;
 
 	int size_serializado;
@@ -73,18 +72,65 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 void* recibir_mensaje(int socket_cliente, int* size) {
 	//t_paquete* paquete = malloc(sizeof(t_paquete));
 	void * buffer;
-	log_info(logger,"Recibiendo mensaje.");
-	op_code codigoOperacion;
-	recv(socket_cliente, &codigoOperacion, sizeof(op_code), MSG_WAITALL);
-	log_info(logger,"el  codigoOperacion: %i", codigoOperacion );
+	log_info(logger, "Recibiendo mensaje.");
 
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
-	log_info(logger,"Tamaño de paquete recibido: %i", *size);
+	log_info(logger, "Tamano de paquete recibido: %d", *size);
 
 	buffer = malloc(*size);
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-	log_info(logger,"Mensaje recibido: %s", buffer);
+	log_info(logger, "Mensaje recibido: %s", buffer);
 	return buffer;
+}
+
+void devolver_mensaje(int cod_op, int size, void* payload, int socket_cliente) {
+	log_info(logger, "Devolviendo mensaje");
+	log_info(logger, "size: %d", size);
+	log_info(logger, "socket_cliente: %d", socket_cliente);
+	log_info(logger, "payload: %s", (char*) payload);
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+
+	paquete -> codigo_operacion = cod_op;
+	paquete -> buffer = malloc(sizeof(t_buffer));
+	paquete -> buffer -> size = size;
+	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
+	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
+
+	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
+	void* a_enviar = serializar_paquete(paquete, &bytes);
+
+	send(socket_cliente, a_enviar, bytes, 0);
+
+	free(a_enviar);
+	free(paquete -> buffer -> stream);
+	free(paquete -> buffer);
+	free(paquete);
+	log_info(logger, "Mensaje devuelto");
+}
+
+void agregar_mensaje(int cod_op, int size, void* payload, int socket_cliente){
+	log_info(logger, "Agregando mensaje");
+	log_info(logger, "size: %d", size);
+	log_info(logger, "socket_cliente: %d", socket_cliente);
+	log_info(logger, "payload: %s", (char*) payload);
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+
+	paquete -> codigo_operacion = cod_op;
+	paquete -> buffer = malloc(sizeof(t_buffer));
+	paquete -> buffer -> size = size;
+	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
+	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
+
+	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
+	void* a_agregar = serializar_paquete(paquete, &bytes);
+
+	send(socket_cliente, a_agregar, bytes, 0); // insertar_en_cola
+
+	free(a_agregar);
+	free(paquete -> buffer -> stream);
+	free(paquete -> buffer);
+	free(paquete);
+	log_info(logger, "Mensaje Agregado");
 }
 
 void iniciar_servidor(char *IP, char *PUERTO) {
@@ -141,88 +187,61 @@ void serve_client(int* socket) {
 	close(*socket);
 }
 
-void process_request(int cod_op, int cliente_fd) {
+void process_request(int cod_op, int cliente_fd) { // Cada case depende del que toque ese modulo.
 	int size;
 	void* msg;
 
 	log_info(logger,"Codigo de operacion %d",cod_op);
 
 	switch (cod_op) {
-		case MENSAJE: // EJ: ATRAPAR_POKEMON
-			msg = malloc(12); // EJ: TAMAÑO_PAQUETE_ATRAPAR_POKEMON
+		case TE_GET_POKEMON_BR:
+			msg = malloc(sizeof(t_get_pokemon));
 			msg = recibir_mensaje(cliente_fd, &size);
-
-			devolver_mensaje(msg, size, cliente_fd);
+			agregar_mensaje(BR_GET_POKEMON_GC, size, msg, cliente_fd);
 			free(msg);
 			break;
+		case TE_CATCH_POKEMON_BR:
+			msg = malloc(sizeof(t_catch_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			agregar_mensaje(BR_CATCH_POKEMON_GC, size, msg, cliente_fd);
+			free(msg);
+			break;
+		case GC_LOCALIZED_POKEMON_BR:
+			msg = malloc(sizeof(t_localized_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			agregar_mensaje(BR_LOCALIZED_POKEMON_TE, size, msg, cliente_fd);
+			free(msg);
+			break;
+		case GC_CAUGHT_POKEMON_BR:
+			msg = malloc(sizeof(t_caught_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			agregar_mensaje(BR_CAUGHT_POKEMON_TE, size, msg, cliente_fd);
+			free(msg);
+			break;
+		case GB_NEW_POKEMON_BR:
+			msg = malloc(sizeof(t_new_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			agregar_mensaje(BR_NEW_POKEMON_GC, size, msg, cliente_fd);
+			free(msg);
+			break;
+		case GB_CAUGHT_POKEMON_BR:
+			msg = malloc(sizeof(t_caught_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			agregar_mensaje(BR_CAUGHT_POKEMON_TE, size, msg, cliente_fd);
+			free(msg);
+			break;
+		case BR_GET_POKEMON_GC:
+			msg = malloc(sizeof(t_get_pokemon));
+			msg = recibir_mensaje(cliente_fd, &size);
+			devolver_mensaje(GC_LOCALIZED_POKEMON_BR, size, msg, cliente_fd);
+			free(msg);
+			break;
+		// y mas cases...
 		case 0:
 			pthread_exit(NULL);
 		case -1:
 			pthread_exit(NULL);
 	}
-}
-/*
-void process_request(int cod_op, int cliente_fd) {
-	int size;
-	void* msg;
-
-	log_info(logger,"Codigo de operacion %d",cod_op);
-
-	switch (cod_op) {
-		case MENSAJE:
-			msg = malloc(12);
-			msg = recibir_mensaje(cliente_fd, &size);
-			// TEAM NO VA A DEVOLVER MSG, VA A "REENVIAR MENSAJE" (ANTE ALGO PROVENIENTE DEL GAMEBOY)
-			// reenviar_mensaje(msg, size, config -> a_donde, );
-			free(msg);
-			break;
-		case 0:
-			pthread_exit(NULL);
-		case -1:
-			pthread_exit(NULL);
-	}
-}
-*/
-
-void devolver_mensaje(void* payload, int size, int socket_cliente) {
-	log_info(logger, "Devolviendo mensaje");
-	log_info(logger, "size: %d", size);
-	log_info(logger, "socket_cliente: %d", socket_cliente);
-	log_info(logger, "payload: %s", (char*) payload);
-	t_paquete* paquete = malloc(sizeof(t_paquete));
-
-	paquete -> codigo_operacion = MENSAJE;
-	paquete -> buffer = malloc(sizeof(t_buffer));
-	paquete -> buffer -> size = size;
-	paquete -> buffer -> stream = malloc(paquete -> buffer -> size);
-	memcpy(paquete -> buffer -> stream, payload, paquete -> buffer -> size);
-
-	int bytes = paquete -> buffer -> size + 2 * sizeof(int);
-	void* a_enviar = serializar_paquete(paquete, &bytes);
-
-	send(socket_cliente, a_enviar, bytes, 0);
-
-	free(a_enviar);
-	free(paquete -> buffer -> stream);
-	free(paquete -> buffer);
-	free(paquete);
-	log_info(logger,"Mensaje devuelto");
-}
-
-void liberar_config_broker(t_config_broker* config) {
-	free(config -> algoritmo_memoria);
-	free(config -> algoritmo_reemplazo);
-	free(config -> algoritmo_particion_libre);
-	free(config -> ip_broker);
-	free(config -> puerto);
-	free(config);
-}
-
-void liberar_config_gameCard(t_config_gameCard* config) {
-	free(config -> punto_montaje_tallgrass);
-	free(config -> ip_broker);
-	free(config -> puerto_broker);
-	free(config);
 }
 
 void liberar_config_team(t_config_team* config) {

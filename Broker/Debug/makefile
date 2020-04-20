@@ -26,7 +26,7 @@ endif
 all: Broker
 
 dependents:
-	-cd /home/utnso/workspace/IntentoSO/utils/Debug && $(MAKE) all
+	-cd /home/utnso/workspace/IntentoSO/utils/Debug && $(MAKE) clean all
 
 # Tool invocations
 Broker: $(OBJS) $(USER_OBJS) /home/utnso/workspace/IntentoSO/utils/Debug/libutils.so

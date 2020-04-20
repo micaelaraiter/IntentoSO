@@ -25,11 +25,14 @@ endif
 # All Target
 all: Team
 
+dependents:
+	-cd /home/utnso/workspace/IntentoSO/utils/Debug && $(MAKE) all
+
 # Tool invocations
-Team: $(OBJS) $(USER_OBJS)
+Team: $(OBJS) $(USER_OBJS) /home/utnso/workspace/IntentoSO/utils/Debug/libutils.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc  -o "Team" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L"/home/utnso/workspace/IntentoSO/utils/Debug" -o "Team" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -39,5 +42,6 @@ clean:
 	-@echo ' '
 
 .PHONY: all clean dependents
+/home/utnso/workspace/IntentoSO/utils/Debug/libutils.so:
 
 -include ../makefile.targets

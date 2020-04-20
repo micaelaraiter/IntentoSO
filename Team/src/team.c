@@ -8,7 +8,7 @@ int main(void) {
 	int socket = crear_conexion(config -> ip_broker, config -> puerto_broker);
 
 
-	enviar_mensaje("Get Pokemon", socket);
+	enviar_mensaje(TE_GET_POKEMON_BR, "Get Pokemon", socket);
 
 	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
 	log_info(logger, "El ip es : %s", config -> ip_broker);

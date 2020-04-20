@@ -48,6 +48,15 @@ t_config_broker* leer_config() {
 	return config_broker;
 }
 
+void liberar_config_broker(t_config_broker* config) {
+	free(config -> algoritmo_memoria);
+	free(config -> algoritmo_reemplazo);
+	free(config -> algoritmo_particion_libre);
+	free(config -> ip_broker);
+	free(config -> puerto);
+	free(config);
+}
+
 void terminar_programa(t_log* logger, t_config_broker* config) {
 	liberar_config_broker(config);
 	liberar_logger(logger);
