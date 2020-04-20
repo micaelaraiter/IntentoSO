@@ -14,6 +14,8 @@ int main(void) {
 	log_info(logger, "El ip es : %s", config -> ip_broker);
 	log_info(logger, "El port es : %s ", config -> puerto_broker);
 	terminar_programa(socket, logger, config);
+
+
 }
 
 

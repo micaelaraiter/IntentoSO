@@ -14,6 +14,9 @@ int main(void) {
 	terminar_programa(logger, config);
 //	log_info(logger, "programa terminado");
 
+
+
+	// export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/utnso/workspace/IntentoSO/utils/Debug
 	 return 0;
 }
 
