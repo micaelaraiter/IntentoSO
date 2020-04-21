@@ -8,9 +8,6 @@ int main(void) {
 
 	enviar_mensaje(GC_LOCALIZED_POKEMON_BR, "Localized Pokemon", socket);
 
-	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
-
-
 	log_info(logger, "El ip es : %s", config -> ip_broker);
 	log_info(logger, "El port es : %s ", config -> puerto_broker);
 	terminar_programa(socket, logger, config);
