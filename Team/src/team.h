@@ -14,5 +14,12 @@ t_config_team* leer_config(void);
 void terminar_programa(int, t_log*, t_config_team*);
 void liberar_conexion(int);
 void liberar_logger(t_log* logger);
-void liberar_config_team(t_config_team*);
+void liberar_config(t_config_team*);
 
+typedef struct {
+    int tiempo_reintento_conexion;
+	int tiempo_reintento_operacion;
+	char* punto_montaje_tallgrass;
+	char* ip_broker;
+	char* puerto_broker;
+} t_config_team;

@@ -45,6 +45,13 @@ t_config_team* leer_config() {
 	return config_team;
 }
 
+void liberar_config(t_config_team* config) {
+	free(config -> punto_montaje_tallgrass);
+	free(config -> ip_broker);
+	free(config -> puerto_broker);
+	free(config);
+}
+
 void terminar_programa(int conexion,t_log* logger,t_config_team* config) {
 	liberar_config_team(config);
 	liberar_logger(logger);

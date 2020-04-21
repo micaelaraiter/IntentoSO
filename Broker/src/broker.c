@@ -20,7 +20,7 @@ int main(void) {
 t_log* iniciar_logger(void) {
 	t_log* logger = log_create("broker.log", "broker", 1, LOG_LEVEL_INFO);
 
-	if(logger == NULL){
+	if(logger == NULL) {
 		printf("fallo la creacion del logger\n");
 		exit(1);
 	}
@@ -48,7 +48,7 @@ t_config_broker* leer_config() {
 	return config_broker;
 }
 
-void liberar_config_broker(t_config_broker* config) {
+void liberar_config(t_config_broker* config) {
 	free(config -> algoritmo_memoria);
 	free(config -> algoritmo_reemplazo);
 	free(config -> algoritmo_particion_libre);
@@ -58,6 +58,6 @@ void liberar_config_broker(t_config_broker* config) {
 }
 
 void terminar_programa(t_log* logger, t_config_broker* config) {
-	liberar_config_broker(config);
+	liberar_config(config);
 	liberar_logger(logger);
 }

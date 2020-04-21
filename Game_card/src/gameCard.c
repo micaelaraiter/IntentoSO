@@ -45,7 +45,7 @@ t_config_game_card* leer_config() {
 	return config_game_card;
 }
 
-void liberar_config_game_card(t_config_game_card* config) {
+void liberar_config(t_config_game_card* config) {
 	free(config -> punto_montaje_tallgrass);
 	free(config -> ip_broker);
 	free(config -> puerto_broker);

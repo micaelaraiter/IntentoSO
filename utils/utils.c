@@ -1,8 +1,5 @@
 #include "utils.h"
 
-/* Recibe un paquete a serializar, y un puntero a un int en el que dejar
- * el tamaño del stream de bytes serializados que devuelve
- */
 void* serializar_paquete(t_paquete* paquete, int* bytes) {
 	int malloc_size = paquete -> buffer -> size + sizeof(op_code) + sizeof(int);
 	void* stream = malloc(malloc_size);
@@ -17,10 +14,9 @@ void* serializar_paquete(t_paquete* paquete, int* bytes) {
 
 	(*bytes) = malloc_size;
 	log_info(logger, "bytes: %d", *bytes);
-	log_info(logger, "cod op a enviar %i", paquete -> codigo_operacion);
-	log_info(logger, "tam a enviar %i", paquete -> buffer -> size);
+	log_info(logger, "cod op a enviar %d", paquete -> codigo_operacion);
+	log_info(logger, "tam a enviar %d", paquete -> buffer -> size);
 	log_info(logger, "mensaje a enviar %s", paquete -> buffer -> stream);
-	return stream;
 
 	return stream;
 }
@@ -242,13 +238,6 @@ void process_request(int cod_op, int cliente_fd) { // Cada case depende del que 
 		case -1:
 			pthread_exit(NULL);
 	}
-}
-
-void liberar_config_team(t_config_team* config) {
-	free(config -> punto_montaje_tallgrass);
-	free(config -> ip_broker);
-	free(config -> puerto_broker);
-	free(config);
 }
 
 //SUGERENCIA: Hacer un unico liberar_config con un case de acuerdo al tipo de config que recibe.

@@ -12,33 +12,6 @@
 #include<string.h>
 #include<pthread.h>
 
-typedef struct {
-    int size_memoria;
-	int size_min_memoria;
-	char* algoritmo_memoria;
-	char* algoritmo_reemplazo;
-	char* algoritmo_particion_libre;
-	char* ip_broker;
-	char* puerto;
-	int frecuencia_compactacion;
-} t_config_broker;
-
-typedef struct {
-    int tiempo_reintento_conexion;
-	int tiempo_reintento_operacion;
-	char* punto_montaje_tallgrass;
-	char* ip_broker;
-	char* puerto_broker;
-} t_config_team;
-
-typedef struct {
-    int tiempo_reintento_conexion;
-	int tiempo_reintento_operacion;
-	char* punto_montaje_tallgrass;
-	char* ip_broker;
-	char* puerto_broker;
-} t_config_game_card;
-
 typedef enum {
 	//Team a Broker
 	TE_GET_POKEMON_BR = 1,
