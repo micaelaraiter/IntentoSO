@@ -53,7 +53,7 @@ void liberar_config(t_config_team* config) {
 }
 
 void terminar_programa(int conexion,t_log* logger,t_config_team* config) {
-	liberar_config_team(config);
+	liberar_config(config);
 	liberar_logger(logger);
 	liberar_conexion(conexion);
 }
