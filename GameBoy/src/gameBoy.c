@@ -1,23 +1,23 @@
 #include "gameBoy.h"
 
 int main(void) {
-//	t_config_game_boy* config = leer_config();
-//	logger = iniciar_logger();
-//
-//	//int socket = crear_conexion(config -> ip_broker, config -> puerto_broker)
-//	//enviar_mensaje(GC_LOCALIZED_POKEMON_BR, "Localized Pokemon", socket);
-//
-//	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
-//	char opcion[3];
-//	printf("Seleccione el mensaje que desea enviar\n 1-GET_POKEMON \n 2.CATCH_POKEMON \n 3.LOCALIZED_POKEMON \n 4.CAUGHT_POKEMON \n 5.APPEARED_POKEMON \n 6.NEW_POKEMON ");
-//	fgets(opcion,3,stdin);
-//
-//	log_info(logger, "El codigo seleccionado es : %s", opcion);
-//
-//
-//	log_info(logger, "El ip es : %s", config -> ip_broker);
-//	log_info(logger, "El port es : %s ", config -> puerto_broker);
-//	//terminar_programa(socket, logger, config);
+	t_config_game_boy* config = leer_config();
+	logger = iniciar_logger();
+
+	//int socket = crear_conexion(config -> ip_broker, config -> puerto_broker)
+	//enviar_mensaje(GC_LOCALIZED_POKEMON_BR, "Localized Pokemon", socket);
+
+	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
+	char opcion[3];
+	printf("Seleccione el mensaje que desea enviar\n 1-GET_POKEMON \n 2.CATCH_POKEMON \n 3.LOCALIZED_POKEMON \n 4.CAUGHT_POKEMON \n 5.APPEARED_POKEMON \n 6.NEW_POKEMON ");
+	fgets(opcion,3,stdin);
+
+	log_info(logger, "El codigo seleccionado es : %s", opcion);
+
+
+	log_info(logger, "El ip es : %s", config -> ip_broker);
+	log_info(logger, "El port es : %s ", config -> puerto_broker);
+	terminar_programa(socket, logger, config);
 }
 
 
