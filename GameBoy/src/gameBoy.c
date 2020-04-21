@@ -8,10 +8,9 @@ int main(void) {
 	//enviar_mensaje(GC_LOCALIZED_POKEMON_BR, "Localized Pokemon", socket);
 
 	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
-	char opcion[3];
+	char opcion[2];
 	printf("Seleccione el mensaje que desea enviar\n 1-GET_POKEMON \n 2.CATCH_POKEMON \n 3.LOCALIZED_POKEMON \n 4.CAUGHT_POKEMON \n 5.APPEARED_POKEMON \n 6.NEW_POKEMON ");
-	fgets(opcion,3,stdin);
-
+	fgets(opcion,2,stdin);
 	log_info(logger, "El codigo seleccionado es : %s", opcion);
 
 
@@ -54,12 +53,18 @@ t_config_game_boy* leer_config() {
 
 
 void liberar_config(t_config_game_boy* config) {
-
+    free(config -> ip_broker);
+	free(config -> puerto_broker);
+	free(config ->  ip_team  );
+	free(config -> puerto_team);
+	free(config -> ip_gameCard);
+	free(config -> puerto_broker);
 	free(config);
 }
 
 void terminar_programa(int conexion,t_log* logger, t_config_game_boy* config) {
 	liberar_config(config);
+
 	liberar_logger(logger);
 	liberar_conexion(conexion);
 }
