@@ -33,7 +33,9 @@ void leer_config(void) {
 
 	t_config* config = config_create("Debug/team.config");
 
-	config_team -> entrenadores -> entrenador -> posicion = config_get_array_value(config, "POSICIONES_ENTRENADORES");
+	config_team -> posiciones_entrenadores = (int**) config_get_array_value(config, "POSICIONES_ENTRENADORES");
+	config_team -> pokemon_entrenadores = config_get_array_value(config, "POKEMON_ENTRENADORES");
+	config_team -> objetivos_entrenadores = config_get_array_value(config, "OBJETIVOS_ENTRENADORES");
 	config_team -> tiempo_reconexion = config_get_int_value(config, "TIEMPO_RECONEXION");
 	config_team -> retardo_cpu = config_get_int_value(config, "RETARDO_CICLO_CPU");
 	config_team -> algoritmo_planificacion = strdup(config_get_string_value(config, "ALGORITMO_PLANIFICACION"));

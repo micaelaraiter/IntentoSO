@@ -15,18 +15,26 @@ typedef struct {
 
 typedef struct { // capaz tengamos que agregar un id
     int posicion[2];
-	t_lista_pokemons* posesion;
-	t_lista_pokemons* objetivo;
+    int* prev;
 	int* next;
-} t_entrenador;
+} t_lista_posiciones;
 
 typedef struct {
-	t_entrenador* entrenador;
+	t_lista_pokemons* pokemon;
+	int* prev;
 	int* next;
-} t_lista_entrenadores;
+} t_lista_pokemon_entrenadores;
 
 typedef struct {
-	t_lista_entrenadores* entrenadores;
+	t_lista_pokemons* pokemon;
+	int* prev;
+	int* next;
+} t_lista_objetivos_entrenadores;
+
+typedef struct {
+	t_lista_posiciones* posiciones_entrenadores;
+	t_lista_pokemon_entrenadores* pokemon_entrenadores;
+	t_lista_objetivos_entrenadores* objetivos_entrenadores;
     int tiempo_reconexion;
 	int retardo_cpu;
 	char* algoritmo_planificacion;
