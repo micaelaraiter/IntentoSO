@@ -72,12 +72,12 @@ typedef struct {
 	int cantidad;
 	int* next;
 	// capaz tengamos q agregar un int* previous;
-} t_lista_pokemons;
+} t_lista_pokemones; //CUIDADO ACA, TEAM TIENE UN t_lista_pokemons, esto va a ir en gamecard
 
 typedef struct {
 	int id_mensaje;
 	int pokemon;
-	t_lista_pokemons* lista_pokemons; //rever esto
+	t_lista_pokemones* lista_pokemons; //CUIDADO ACA, TEAM TIENE UN t_lista_pokemons
 } t_localized_pokemon;
 
 typedef struct {

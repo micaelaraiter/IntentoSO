@@ -8,16 +8,38 @@
 #include<utils.h>
 
 typedef struct {
-    int tiempo_reintento_conexion;
-	int tiempo_reintento_operacion;
-	char* punto_montaje_tallgrass;
+	char* pokemon;
+	int* prev;
+	int* next;
+} t_lista_pokemons;
+
+typedef struct { // capaz tengamos que agregar un id
+    int posicion[2];
+	t_lista_pokemons* posesion;
+	t_lista_pokemons* objetivo;
+	int* next;
+} t_entrenador;
+
+typedef struct {
+	t_entrenador* entrenador;
+	int* next;
+} t_lista_entrenadores;
+
+typedef struct {
+	t_lista_entrenadores* entrenadores;
+    int tiempo_reconexion;
+	int retardo_cpu;
+	char* algoritmo_planificacion;
 	char* ip_broker;
 	char* puerto_broker;
+	int estimacion_inicial;
+	char* log_path;
 } t_config_team;
 
+t_config_team* config;
 t_log* logger;
-t_log* iniciar_logger(void);
-t_config_team* leer_config(void);
+void iniciar_logger(void);
+void leer_config(void);
 void terminar_programa(int, t_log*, t_config_team*);
 void liberar_conexion(int);
 void liberar_logger(t_log* logger);

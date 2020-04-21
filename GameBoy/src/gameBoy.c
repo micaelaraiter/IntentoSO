@@ -3,9 +3,8 @@
 int main(void) {
 	t_config_game_boy* config = leer_config();
 	logger = iniciar_logger();
-	int socket;
-	//int socket = crear_conexion(config -> ip_broker, config -> puerto_broker);
 
+	//int socket = crear_conexion(config -> ip_broker, config -> puerto_broker)
 	//enviar_mensaje(GC_LOCALIZED_POKEMON_BR, "Localized Pokemon", socket);
 
 	//t_buffer* recibido = recibir_mensaje(socket, strlen("Hola")+ 1);
