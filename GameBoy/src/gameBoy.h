@@ -16,8 +16,10 @@ typedef struct {
 } t_config_game_boy;
 
 t_log* logger;
-t_log* iniciar_logger(void);
-t_config_game_boy* leer_config(void);
+t_config_game_boy* config_game_boy;
+void iniciar_logger(void);
+void leer_config(void);
+void preparar_mensaje(int cantidad_parametros,char *parametros[]);
 void terminar_programa(int, t_log*, t_config_game_boy*);
 void liberar_conexion(int);
 void mostrar_menu(void);
